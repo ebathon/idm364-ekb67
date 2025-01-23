@@ -1,6 +1,15 @@
 <script>
-
+    let numbers = [1,2,3,4,5];
+    let people = [
+        {name: 'a'}, 
+        {name: 'b'}, 
+        {name: 'c'}, 
+        {name: 'd'}
+];
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<ul>
+    {#each people as {name}}
+        <li>{people]}</li>
+    {/each}
+</ul>
