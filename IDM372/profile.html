@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="image/favicon.png">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="css/profile.css">
+  
+</head>
+<body>
+    <header>
+       
+        <div>Happen</div>
+        <div class="setting"><img src="image/settings_icon.png" height="28" width="28"/></div>
+        
+    
+    </header>
+
+<div class="content">
+
+    <div class="content">
+       
+        <div class="register_content">
+          <!-- <?php if (!empty($loginError)): ?>
+                <p class="error"><?php echo $loginError; ?></p>
+            <?php endif; ?>--> 
+            <form action="signin.php" method="post">
+                <div class="form-group">
+                    <label for="email">Phone Number:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+               
+                
+              
+            </form> <a href="profile2.html"> <button class="signin" type="submit" name="login">Next</button></a>
+        </div>
+    </div>
+    <!-- Added home header -->
+    <!--<div class="content_top">
+        <div class="home_title" style="color: white"></div>
+        <div class="StarIcon">
+            <span>10/20</span> <!-- Switch order of span and star icon
+            <img src="image/home_assets/icons/rewards_star_icon_full.svg" height="25" width="27"/>
+        </div>
+        <div class="line"></div>
+    </div> -->
+   
+</div>
+<menu>
+    <div id="home">
+        <a href="home.html"> <img src="image/home_nav.png" height="60" width="60"/></a>
+    </div>
+    <div id="map">
+        <a href="likes.html"> <img src="image/likes_nav.png" height="60" width="60"/></a>
+    </div>
+    <div id="order">
+        <a href="messages.html"> <img src="image/message_nav.png" height="60" width="60"/></a>
+    </div>
+    <div class="active" id="rewards">
+        <img src="image/profile_nav.png" height="60" width="60"/>
+    </div>
+    <!--<div id="account">
+        <img src="image/home_assets/icons/account_icon_neutral.svg" height="35" width="35"/>
+    </div> -->
+</menu>
+</body>
+</html>
