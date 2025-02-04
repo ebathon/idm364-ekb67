@@ -55,12 +55,18 @@ h3{
 .register_content {
     display: flex;
     justify-content: center;
-    align-items: center;
+  
     flex-direction: column;
   
     padding: 2rem 3rem;
     border-radius: 20px;
     max-width: 100%;
+}
+#edu{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 40px;
 }
 
 
@@ -104,7 +110,11 @@ label {
     font-size: 18px;
     margin-top: 10px;
     margin-bottom: 10px;
+    text-align: left;
 
+}
+div.register_content label {
+    justify-content: left;
 }
 
 input, button {
