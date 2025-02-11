@@ -26,6 +26,11 @@
     font-family: 'Roboto';
 }
 
+@font-face{
+    src: url("../font/Nunito-VariableFont_wght.ttf");
+    font-family: 'Nunito';
+}
+
 header{
     background-image: linear-gradient(#D3B9FF, rgb(255, 255, 255));
     display: flex;
@@ -75,7 +80,7 @@ div.register_content form{
 }
 
 .register_content label{
-    font-family: 'Button-Text';
+    font-family: 'Nunito';
     font-size: 1rem;
 }
 
@@ -221,8 +226,7 @@ menu>div{
     border-radius: 5px;
 }
 .active{
-    background: #482C2C;
-    color: white;
+   
 }
 a{
     text-decoration: none;
