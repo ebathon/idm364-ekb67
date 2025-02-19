@@ -176,10 +176,6 @@
         text-decoration: none;
     }
 
-    menu > div > div {
-        margin-top: 5px;
-    }
-
     .content {
         height: calc(100vh - 78px);
         padding: 15px 15px 100px 15px;
