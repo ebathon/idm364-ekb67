@@ -9,16 +9,22 @@
     let currentCity = "Unknown";
     let events = [];
     let error = null;
+    let nextPageToken = null;
+    let isLoading = false;
 
-    // Function to generate a simple hash from a string (URL)
-    function hashString(str) {
-        return str.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    // Function to generate a unique event ID using title + link
+    function generateUniqueId(event) {
+        return `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`;
     }
 
     // Function to fetch events based on the detected city
     async function getEvents() {
+        if (isLoading) return;
+        isLoading = true;
+
         try {
-            const res = await fetch(`/api/events?city=${encodeURIComponent(currentCity)}`);
+            const url = `/api/events?city=${encodeURIComponent(currentCity)}&maxResults=20${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
+            const res = await fetch(url);
 
             if (!res.ok) {
                 throw new Error(`HTTP error! Status: ${res.status}`);
@@ -27,14 +33,24 @@
             const data = await res.json();
             console.log("Fetched events:", data);
 
-            // Assign unique ID to each event using its URL
-            events = (data.events_results || []).map(event => ({
+            // Assign unique ID and filter duplicates
+            const newEvents = (data.events_results || []).map(event => ({
                 ...event,
-                id: `event-${hashString(event.link)}` // Generate an ID from the event's URL
+                id: generateUniqueId(event) // Ensure unique ID
             }));
+
+            // Filter out duplicates before appending
+            const uniqueNewEvents = newEvents.filter(newEvent => !events.some(e => e.id === newEvent.id));
+
+            events = [...events, ...uniqueNewEvents]; // Append only unique events
+
+            // Update nextPageToken for next request
+            nextPageToken = data.nextPageToken || null;
         } catch (err) {
             console.error(err);
             error = "Failed to fetch events.";
+        } finally {
+            isLoading = false;
         }
     }
 
@@ -89,31 +105,6 @@
         box-sizing: border-box;
     }
 
-    @font-face {
-        src: url("../font/PermanentMarker-Regular.ttf");
-        font-family : 'PermanentMarker-Regular';
-    }
-    @font-face {
-        src: url("../font/Piazzolla_24pt-Bold.ttf");
-        font-family: 'Piazzolla_24pt-Bold';
-    }
-    @font-face {
-        src: url("../font/Fredoka-VariableFont_wdth,wght.ttf");
-        font-family: 'Fredoka';
-    }
-    @font-face {
-        src: url("../font/Poppins-Bold.ttf");
-        font-family: 'Price-Bold';
-    }
-    @font-face {
-        src: url("../font/Poppins-SemiBold.ttf");
-        font-family: 'Button-Text';
-    }
-    @font-face {
-        src: url("../font/Roboto-VariableFont_wdth,wght.ttf");
-        font-family: 'Roboto';
-    }
-
     img {
         display: block;
     }
@@ -162,87 +153,56 @@
         margin: auto;
     }
 
-    menu > div {
-        padding: 10px;
-        border-radius: 5px;
-    }
-
-    .active {
-        background: #482C2C;
-        color: white;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
     .content {
         height: calc(100vh - 78px);
         padding: 15px 15px 100px 15px;
     }
 
-    .main_home_title {
-        font-size: 26px;
-        font-weight: bold;
-        font-family: 'Fredoka';
-        margin-bottom: 1.75rem;
-    }
-
     .events-container {
         display: flex;
-        overflow-x: auto;
+        flex-wrap: wrap;
         gap: 20px;
         padding: 10px;
-        scroll-snap-type: x mandatory;
+        justify-content: center;
     }
 
     .events-container .events {
-        flex: 0 0 auto;
-        width: 180px;
+        width: 220px;
         border: 3px solid black;
         padding: 10px;
-        scroll-snap-align: start;
         text-align: center;
+        border-radius: 8px;
+        background-color: white;
     }
 
     .events-container img {
         object-fit: cover;
         align-content: center;
-        margin: auto;
+        width: 100%;
+        border-radius: 5px;
     }
 
-    .describe{
-        text-overflow: ellipsis;
+    .load-more {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-family: "Poppins";
+        background-color: #482C2C;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
     }
 
-    @media screen and (max-width: 960px) {
-        header {
-            padding: 30px;
-            font-size: 26px;
-        }
+    .load-more:hover {
+        background-color: #6a3f3f;
+    }
 
-        menu {
-            position: fixed;
-            justify-content: space-between;
-            padding: 10px;
-            width: 100% !important;
-            border-radius: 0 !important;
-            display: flex;
-            align-items: center;
-            bottom: 0px;
-        }
-
-        menu > div {
-            display: flex;
-            align-items: center;
-            height: 60px;
-            padding: 0px;
-        }
-
-        .content {
-            height: calc(100vh - 180px);
-            padding: 15px;
-        }
+    .load-more:disabled {
+        background-color: #bbb;
+        cursor: not-allowed;
     }
 </style>
 
@@ -254,9 +214,6 @@
         <img src={setting} height="28" width="28" alt="Settings"/>
     </div>
 </header>
-
-
-
 
 <!-- Main Content -->
 <div class="content">
@@ -279,6 +236,13 @@
                 </div>
             {/each}
         </div>
+
+        <!-- Load More Button (disabled if no more pages) -->
+        {#if nextPageToken}
+            <button on:click={getEvents} class="load-more">Load More Events</button>
+        {:else}
+            <p style="text-align:center; margin-top: 10px;">No more events to load.</p>
+        {/if}
     {/if}
 </div>
 
