@@ -263,10 +263,7 @@ import { onMount } from "svelte";
       margin: 0;
     }
     
-    .liked {
-      /* Any styles for liked elements */
-    }
-    
+
     menu {
       background-image: linear-gradient(rgb(255, 255, 255), #D3B9FF);
       display: flex;
