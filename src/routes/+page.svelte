@@ -245,3 +245,11 @@
         {/if}
     {/if}
 </div>
+
+<!-- Navigation Menu -->
+<menu>
+    <div class="active" id="home"><img src={home} height="60" width="60" alt="Home"/></div>
+    <div><a href="likes"><img src={likes} height="60" width="60" alt="Likes"/></a></div>
+    <div><a href="$lib/routes/messages"><img src={message} height="60" width="60" alt="Likes"/></a></div>
+    <div><a href="profile"><img src={profile} height="60" width="60" alt="Likes"/></a></div>
+</menu>
