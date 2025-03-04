@@ -11,12 +11,30 @@
     let error = null;
     let nextPageToken = null;
     let isLoading = false;
+    let favoriteEvents = [];
 
+    onMount(() => {
+    const storedFavorites = localStorage.getItem('favoriteEvents');
+    if (storedFavorites) {
+        favoriteEvents = JSON.parse(storedFavorites);
+    }
+    detectCityAndFetchEvents();
+});
     // Function to generate a unique event ID using title + link
     function generateUniqueId(event) {
         return `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`;
     }
 
+// Function to toggle favorite status
+    function toggleFavorite(eventId) {
+    if (favoriteEvents.includes(eventId)) {
+        favoriteEvents = favoriteEvents.filter(id => id !== eventId);
+    } else {
+        favoriteEvents = [...favoriteEvents, eventId];
+    }
+    // Save to localStorage
+    localStorage.setItem('favoriteEvents', JSON.stringify(favoriteEvents));
+}
     // Function to fetch events based on the detected city
     async function getEvents() {
         if (isLoading) return;
@@ -52,6 +70,11 @@
         } finally {
             isLoading = false;
         }
+            // Function to retry after an error
+    function retryFetch() {
+        error = null;
+        detectCityAndFetchEvents();
+    }
     }
 
     // Function to detect user's city and update `currentCity`
@@ -207,6 +230,9 @@
 </style> -->
 
 <style>
+      /* Import Nunito font from Google Fonts */
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+    
     * {
         padding: 0;
         margin: 0;
@@ -214,6 +240,12 @@
         font-family: 'SF Pro Display', 'Roboto', sans-serif;
     }
 
+    :global(body) {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    }
+    
     img {
         display: block;
     }
@@ -269,27 +301,13 @@
         background-repeat: no-repeat;
     }
 
-    
-    /* Category section styles */
-    .category-section {
-        margin-bottom: 25px;
-    }
-
-    .category-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 20px 10px 20px;
-    }
-
-    .category-title {
-        font-size: 18px;
+        /* H3 styling with Nunito font */
+        h3 {
+        font-family: 'Nunito', sans-serif;
+        font-size: 24px;
         font-weight: 600;
-    }
-
-    .see-more {
-        font-size: 14px;
-        color: #555;
+        padding: 0 20px;
+        margin-bottom: 15px;
     }
 
     /* Events display */
@@ -394,7 +412,34 @@
         color: #999;
         cursor: not-allowed;
     }
+    /* Error styles */
+    .error-container {
+        background-color: #FFF3F3;
+        border-left: 4px solid #FF5252;
+        margin: 20px;
+        padding: 15px;
+        border-radius: 0 8px 8px 0;
+    }
 
+    .error-container p {
+        color: #D32F2F;
+        margin-bottom: 10px;
+    }
+
+    .retry-button {
+        background-color: #FF5252;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .retry-button:hover {
+        background-color: #D32F2F;
+    }
+    
     /* Navigation menu styling */
     menu {
   display: flex;
@@ -448,6 +493,15 @@ menu img {
         <div class="events-container">
             {#each events as event (event.id)}
                 <div class="events">
+                    <button 
+                        class="favorite-btn" 
+                        on:click={() => toggleFavorite(event.id)}
+                         aria-label={favoriteEvents.includes(event.id) ? "Remove from favorites" : "Add to favorites"}
+                    >
+                        <svg class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}" viewBox="0 0 24 24">
+                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                     </svg>
+                    </button>
                     <a href={event.link} target="_blank">
                         <img src={event.thumbnail || "https://via.placeholder.com/150"} alt="Event Thumbnail" class="thumbnail"/>
                         <strong>{event.title}</strong>
