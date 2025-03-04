@@ -363,7 +363,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
 
@@ -412,33 +411,9 @@
         color: #999;
         cursor: not-allowed;
     }
-    /* Error styles */
-    .error-container {
-        background-color: #FFF3F3;
-        border-left: 4px solid #FF5252;
-        margin: 20px;
-        padding: 15px;
-        border-radius: 0 8px 8px 0;
-    }
 
-    .error-container p {
-        color: #D32F2F;
-        margin-bottom: 10px;
-    }
 
-    .retry-button {
-        background-color: #FF5252;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    }
 
-    .retry-button:hover {
-        background-color: #D32F2F;
-    }
     
     /* Navigation menu styling */
     menu {

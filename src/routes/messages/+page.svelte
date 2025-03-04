@@ -75,7 +75,8 @@
 <div class="content">
 {#if activeTab === 'myMessages'}
   {#each messagesData.myMessages as msg}
-    <div class="message-card {msg.status === 'pending' ? 'pending' : msg.status === 'accepted' ? 'accepted' : 'expiring'}">
+  <a class="messenger" href="/messenger" style="text-decoration: none; color: black">
+    <div class="message-card {msg.status === 'pending' ? 'pending' : msg.status === 'accepted' ? 'accepted' : 'expiring'}" >
       <div class="profile-image">
         <img src={msg.image} alt="{msg.name}'s profile"/>
       </div>
@@ -88,6 +89,7 @@
         <span class="status-icon">{msg.icon}</span>
       </div>
     </div>
+  </a>
   {/each}
 {:else}
   {#each messagesData.requests as msg}
@@ -234,6 +236,18 @@ header .back-button {
   background-color: #e8f5e9;
 }
 
+.accepted:hover{
+  background-color: #7848FB;
+  transition: all 0.2s;
+  color: white;
+}
+
+.accepted:hover .message-preview{
+  color:white;
+  transition: all 0.2s;
+}
+
+
 .expiring {
   background-color: #fff8e1;
 }
@@ -266,6 +280,8 @@ header .back-button {
   color: #666;
   font-size: 14px;
 }
+
+
 
 .message-status {
   position: absolute;
@@ -310,4 +326,6 @@ menu img {
   width: 60px;
   height: 60px;
 }
+
+
 </style>
