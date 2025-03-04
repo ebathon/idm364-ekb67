@@ -55,38 +55,6 @@
       box-sizing: border-box;
     }
   
-    /* In Svelte, we'd typically handle fonts in the global CSS file, 
-       but including here for the conversion */
-    :global(@font-face) {
-      src: url("../font/PermanentMarker-Regular.ttf");
-      font-family: 'PermanentMarker-Regular';
-    }
-    
-    :global(@font-face) {
-      src: url("../font/Piazzolla_24pt-Bold.ttf");
-      font-family: 'Piazzolla_24pt-Bold';
-    }
-    
-    :global(@font-face) {
-      src: url("../font/Fredoka-VariableFont_wdth,wght.ttf");
-      font-family: 'Fredoka';
-    }
-    
-    :global(@font-face) {
-      src: url("../font/Poppins-Regular.ttf");
-      font-family: 'Mobile-Standard';
-    }
-    
-    :global(@font-face) {
-      src: url("../font/Roboto-VariableFont_wdth,wght.ttf");
-      font-family: 'Roboto';
-    }
-    
-    :global(@font-face) {
-      src: url("../font/Nunito-VariableFont_wght.ttf");
-      font-family: 'Nunito';
-    }
-  
     header {
       background-image: linear-gradient(#D3B9FF, rgb(255, 255, 255));
       display: flex;
