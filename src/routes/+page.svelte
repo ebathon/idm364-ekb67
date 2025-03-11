@@ -1,125 +1,121 @@
 <script>
-    import { onMount } from "svelte";
-    import setting from '$lib/image/settings_icon.png';
-    import home from '$lib/image/home_nav.png';
-    import likes from '$lib/image/likes_nav.png';
-    import message from '$lib/image/message_nav.png';
-    import profile from '$lib/image/profile_nav.png';
+  import { onMount } from "svelte";
+  import setting from '$lib/image/settings_icon.png';
+  import home from '$lib/image/home_nav.png';
+  import likes from '$lib/image/likes_nav.png';
+  import message from '$lib/image/message_nav.png';
+  import profile from '$lib/image/profile_nav.png';
+  import { supabase } from '$lib/supabaseClient';
 
-    let currentCity = "Unknown";
-    let events = [];
-    let error = null;
-    let nextPageToken = null;
-    let isLoading = false;
-    let favoriteEvents = [];
+  let currentCity = "Unknown";
+  let events = []; // API events
+  let supabaseEvents = []; // Supabase events
+  let error = null;
+  let nextPageToken = null;
+  let isLoading = false;
+  let favoriteEvents = [];
 
-    onMount(() => {
-    const storedFavorites = localStorage.getItem('favoriteEvents');
-    if (storedFavorites) {
-        favoriteEvents = JSON.parse(storedFavorites);
-    }
-    detectCityAndFetchEvents();
-});
-    // Function to generate a unique event ID using title + link
-    function generateUniqueId(event) {
-        return `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`;
-    }
+  onMount(() => {
+      const storedFavorites = localStorage.getItem('favoriteEvents');
+      if (storedFavorites) {
+          favoriteEvents = JSON.parse(storedFavorites);
+      }
+      detectCityAndFetchEvents();
+      fetchSupabaseEvents();
+  });
 
-// Function to toggle favorite status
-    function toggleFavorite(eventId) {
-    if (favoriteEvents.includes(eventId)) {
-        favoriteEvents = favoriteEvents.filter(id => id !== eventId);
-    } else {
-        favoriteEvents = [...favoriteEvents, eventId];
-    }
-    // Save to localStorage
-    localStorage.setItem('favoriteEvents', JSON.stringify(favoriteEvents));
-}
-    // Function to fetch events based on the detected city
-    async function getEvents() {
-        if (isLoading) return;
-        isLoading = true;
+  // Fetch events from Supabase
+  async function fetchSupabaseEvents() {
+      const { data, error } = await supabase.from('happen').select('*');
+      if (error) {
+          console.error("Error fetching from Supabase:", error);
+      } else {
+          supabaseEvents = [...data]; // Ensure reactivity
+      }
+  }
 
-        try {
-            const url = `/api/events?city=${encodeURIComponent(currentCity)}&maxResults=20${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
-            const res = await fetch(url);
+  // Function to generate a unique event ID
+  function generateUniqueId(event) {
+      return `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`;
+  }
 
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
-            }
+  // Function to toggle favorite status
+  function toggleFavorite(eventId) {
+      if (favoriteEvents.includes(eventId)) {
+          favoriteEvents = favoriteEvents.filter(id => id !== eventId);
+      } else {
+          favoriteEvents = [...favoriteEvents, eventId];
+      }
+      localStorage.setItem('favoriteEvents', JSON.stringify(favoriteEvents));
+  }
 
-            const data = await res.json();
-            console.log("Fetched events:", data);
+  // Function to fetch API-based events based on the detected city
+  async function getEvents() {
+      if (isLoading) return;
+      isLoading = true;
 
-            // Assign unique ID and filter duplicates
-            const newEvents = (data.events_results || []).map(event => ({
-                ...event,
-                id: generateUniqueId(event) // Ensure unique ID
-            }));
+      try {
+          const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+          const res = await fetch(url);
 
-            // Filter out duplicates before appending
-            const uniqueNewEvents = newEvents.filter(newEvent => !events.some(e => e.id === newEvent.id));
+          if (!res.ok) {
+              throw new Error(`HTTP error! Status: ${res.status}`);
+          }
 
-            events = [...events, ...uniqueNewEvents]; // Append only unique events
+          const data = await res.json();
+          console.log("Fetched events:", data);
 
-            // Update nextPageToken for next request
-            nextPageToken = data.nextPageToken || null;
-        } catch (err) {
-            console.error(err);
-            error = "Failed to fetch events.";
-        } finally {
-            isLoading = false;
-        }
-            // Function to retry after an error
-    function retryFetch() {
-        error = null;
-        detectCityAndFetchEvents();
-    }
-    }
+          // Assign unique ID and filter duplicates
+          const newEvents = (data.events_results || []).map(event => ({
+              ...event,
+              id: generateUniqueId(event) // Ensure unique ID
+          }));
 
-    // Function to detect user's city and update `currentCity`
-    function detectCityAndFetchEvents() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (pos) => {
-                    const { latitude, longitude } = pos.coords;
+          // Filter out duplicates before appending
+          const uniqueNewEvents = newEvents.filter(newEvent => !events.some(e => e.id === newEvent.id));
 
-                    try {
-                        const response = await fetch(
-                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                        );
-                        const data = await response.json();
+          events = [...events, ...uniqueNewEvents]; // Append only unique events
+          nextPageToken = data.nextPageToken || null; // Update nextPageToken for pagination
+      } catch (err) {
+          console.error(err);
+          error = "Failed to fetch events.";
+      } finally {
+          isLoading = false;
+      }
+  }
 
-                        if (data.address && data.address.city) {
-                            currentCity = data.address.city;
-                        } else if (data.address && data.address.town) {
-                            currentCity = data.address.town;
-                        } else if (data.address && data.address.village) {
-                            currentCity = data.address.village;
-                        } else {
-                            currentCity = "Unknown Location";
-                        }
+  // Function to detect user's city and update `currentCity`
+  function detectCityAndFetchEvents() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              async (pos) => {
+                  const { latitude, longitude } = pos.coords;
 
-                        getEvents(); // Fetch events after city is detected
-                    } catch (err) {
-                        console.error("Error fetching city:", err);
-                        error = "Failed to fetch city.";
-                    }
-                },
-                (err) => {
-                    console.error("Geolocation error:", err.message);
-                    error = "Unable to retrieve location.";
-                }
-            );
-        } else {
-            console.error("Geolocation is not supported by this browser.");
-            error = "Geolocation is not supported.";
-        }
-    }
+                  try {
+                      const response = await fetch(
+                          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                      );
+                      const data = await response.json();
 
-    // Run geolocation function on component mount
-    onMount(detectCityAndFetchEvents);
+                      currentCity = data.address?.city || data.address?.town || data.address?.village || "Unknown Location";
+                      getEvents(); // Fetch events after detecting city
+                  } catch (err) {
+                      console.error("Error fetching city:", err);
+                      error = "Failed to fetch city.";
+                  }
+              },
+              (err) => {
+                  console.error("Geolocation error:", err.message);
+                  error = "Unable to retrieve location.";
+              }
+          );
+      } else {
+          console.error("Geolocation is not supported by this browser.");
+          error = "Geolocation is not supported.";
+      }
+  }
 </script>
+
 
 <!-- <style>
     * {
@@ -446,83 +442,139 @@ menu img {
   width: 60px;
   height: 60px;
 }
+
+.events-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 0 20px;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.events-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.events {
+    flex: 0 0 auto;
+    width: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border: none;
+    padding: 0;
+    background: white;
+}
+
+.events img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.events a {
+    text-decoration: none;
+    color: black;
+}
+
+.events strong {
+    display: block;
+    font-size: 14px;
+    margin: 10px 10px 5px 10px;
+}
+
+.events p {
+    font-size: 12px;
+    color: #666;
+    margin: 0 10px 10px 10px;
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
 </style>
 <!-- Header -->
 <header>
-    <div class="log"><a href="signin.html">Sign in</a></div>
-    <div>Happen</div>
-    <div class="setting">
-        <img src={setting} height="28" width="28" alt="Settings"/>
-    </div>
+  <div class="log"><a href="signin.html">Sign in</a></div>
+  <div>Happen</div>
+  <div class="setting">
+      <img src={setting} height="28" width="28" alt="Settings"/>
+  </div>
 </header>
 
 <!-- Main Content -->
 <div class="content">
-    <h2 class="main_home_title">Current City: {currentCity}</h2>
+  <h2 class="main_home_title">Current City: {currentCity}</h2>
 
-    {#if error}
-        <p class="error">{error}</p>
-    {:else}
-        <h3>Events in {currentCity}</h3>
+  {#if error}
+      <p class="error">{error}</p>
+  {:else}
+      <h3>API Events in {currentCity}</h3>
+      <div class="events-container">
+          {#each events as event (event.id)}
+              <div class="events">
+                  <button 
+                      class="favorite-btn" 
+                      on:click={() => toggleFavorite(event.id)}
+                       aria-label={favoriteEvents.includes(event.id) ? "Remove from favorites" : "Add to favorites"}
+                  >
+                      <svg class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}" viewBox="0 0 24 24">
+                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                   </svg>
+                  </button>
+                  <a href={event.link} target="_blank">
+                      <img src={event.thumbnail || "https://via.placeholder.com/150"} alt="Event Thumbnail" class="thumbnail"/>
+                      <strong>{event.title}</strong>
+                  </a>
+                  <p>{event.date?.when || "No date available"}</p>
+                  <p class="describe">{event.description || "No description available."}</p>
+              </div>
+          {/each}
+      </div>
 
-        <div class="events-container">
-            {#each events as event (event.id)}
-                <div class="events">
-                    <button 
-                        class="favorite-btn" 
-                        on:click={() => toggleFavorite(event.id)}
-                         aria-label={favoriteEvents.includes(event.id) ? "Remove from favorites" : "Add to favorites"}
-                    >
-                        <svg class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}" viewBox="0 0 24 24">
-                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                     </svg>
-                    </button>
-                    <a href={event.link} target="_blank">
-                        <img src={event.thumbnail || "https://via.placeholder.com/150"} alt="Event Thumbnail" class="thumbnail"/>
-                        <strong>{event.title}</strong>
-                    </a>
-                    <p>{event.date && event.date.when}</p>
-                    <p class="describe">{event.description || "No description available."}</p>
-                </div>
-            {/each}
-        </div>
-
-        <!-- Load More Button (disabled if no more pages) -->
-        {#if nextPageToken}
-            <button on:click={getEvents} class="load-more">Load More Events</button>
-        {:else}
-            <p style="text-align:center; margin-top: 10px;">No more events to load.</p>
-        {/if}
-    {/if}
+      <h3>Supabase Events</h3>
+      <div class="events-container">
+          {#each supabaseEvents as item (item.id)}
+              <div class="events">
+                  <button 
+                      class="favorite-btn" 
+                      on:click={() => toggleFavorite(item.id)}
+                       aria-label={favoriteEvents.includes(item.id) ? "Remove from favorites" : "Add to favorites"}
+                  >
+                      <svg class="heart-icon {favoriteEvents.includes(item.id) ? 'active' : ''}" viewBox="0 0 24 24">
+                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                   </svg>
+                  </button>
+                  <a href={item.link} target="_blank">
+                      <img src={item.image || "https://via.placeholder.com/150"} alt="Event Thumbnail" class="thumbnail"/>
+                      <strong>{item.name}</strong>
+                  </a>
+                  <p>{item.date || "No date available"}</p>
+                  <p class="describe">{item.description || "No description available."}</p>
+              </div>
+          {/each}
+      </div>
+  {/if}
 </div>
 
 <!-- Navigation Menu -->
-<!-- <menu>
+<menu>
     <div class="active" id="home"><img src={home} height="60" width="60" alt="Home"/></div>
     <div><a href="likes"><img src={likes} height="60" width="60" alt="Likes"/></a></div>
     <div><a href="/messages"><img src={message} height="60" width="60" alt="Likes"/></a></div>
     <div><a href="profile"><img src={profile} height="60" width="60" alt="Likes"/></a></div>
-</menu> -->
-
-<menu>
-    <div id="home">
-      <a href="/"> 
-        <img src={home} alt="Home" height="60" width="60"/>
-      </a>
-    </div>
-    <div id="map">
-      <a href="/likes"> 
-        <img src={likes} alt="Likes" height="60" width="60"/>
-      </a>
-    </div>
-    <div class="active" id="order">
-      <a href="/messages"> 
-        <img src={message} alt="Messages" height="60" width="60"/>
-      </a>
-    </div>
-    <div id="rewards">
-      <a href="/profile"> 
-        <img src={profile} alt="Profile" height="60" width="60"/>
-      </a>
-    </div>
-  </menu>
+</menu>
