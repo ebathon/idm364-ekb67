@@ -382,34 +382,6 @@
         width: 18px;
         height: 18px;
     }
-
-    /* Load more button restyled */
-    .load-more {
-        display: block;
-        margin: 20px auto 30px auto;
-        padding: 12px 24px;
-        font-size: 16px;
-        background-color: #D3B9FF;
-        color: black;
-        border: none;
-        cursor: pointer;
-        border-radius: 20px;
-        transition: background-color 0.3s;
-        font-weight: 500;
-    }
-
-    .load-more:hover {
-        background-color: #C0A6EC;
-    }
-
-    .load-more:disabled {
-        background-color: #E0E0E0;
-        color: #999;
-        cursor: not-allowed;
-    }
-
-
-
     
     /* Navigation menu styling */
     menu {
