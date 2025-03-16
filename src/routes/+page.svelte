@@ -1,116 +1,62 @@
 <script>
-  import { onMount } from "svelte";
-  import setting from '$lib/image/settings_icon.png';
-  import home from '$lib/image/home_nav.png';
-  import likes from '$lib/image/likes_nav.png';
-  import message from '$lib/image/message_nav.png';
-  import profile from '$lib/image/profile_nav.png';
-  import { supabase } from '$lib/supabaseClient';
-
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
-
-  let currentCity = "Unknown";
-  let events = []; // API events
-  let supabaseEvents = []; // Supabase events
-  let error = null;
-  let nextPageToken = null;
-  let isLoading = false;
-  let favoriteEvents = [];
-
-  onMount(() => {
-      const storedFavorites = localStorage.getItem('favoriteEvents');
-      if (storedFavorites) {
-          favoriteEvents = JSON.parse(storedFavorites);
-      }
-      detectCityAndFetchEvents();
-      fetchSupabaseEvents();
-  });
-
-  // Fetch events from Supabase
-  async function fetchSupabaseEvents() {
-      const { data, error } = await supabase.from('happen').select('*');
-      if (error) {
-          console.error("Error fetching from Supabase:", error);
-      } else {
-          supabaseEvents = [...data]; // Ensure reactivity
-      }
-  }
-
-  // Function to generate a unique event ID
-  function generateUniqueId(event) {
-      return `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`;
-  }
-
-  // Function to toggle favorite status
-  function toggleFavorite(eventId) {
-      if (favoriteEvents.includes(eventId)) {
-          favoriteEvents = favoriteEvents.filter(id => id !== eventId);
-      } else {
-          favoriteEvents = [...favoriteEvents, eventId];
-      }
-      localStorage.setItem('favoriteEvents', JSON.stringify(favoriteEvents));
-  }
-
-  // Function to fetch API-based events based on the detected city
-
-async function getEvents() {
-    if (isLoading) return;
-    isLoading = true;
-
-    try {
-        const url = `${baseUrl}/.netlify/functions/get-events?city=${encodeURIComponent(currentCity)}`;
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
+    import { onMount } from "svelte";
+    import setting from '$lib/image/settings_icon.png';
+    import home from '$lib/image/home_nav.png';
+    import likes from '$lib/image/likes_nav.png';
+    import message from '$lib/image/message_nav.png';
+    import profile from '$lib/image/profile_nav.png';
+    import { supabase } from '$lib/supabaseClient';
+  
+    // ✅ Declare baseUrl at the top
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
+  
+    let currentCity = "Unknown";
+    let events = [];
+    let supabaseEvents = [];
+    let error = null;
+    let nextPageToken = null;
+    let isLoading = false;
+    let favoriteEvents = [];
+  
+    onMount(() => {
+        const storedFavorites = localStorage.getItem('favoriteEvents');
+        if (storedFavorites) {
+            favoriteEvents = JSON.parse(storedFavorites);
         }
-
-        const data = await res.json();
-        console.log("Fetched events:", data);
-
-        events = (data.events_results || []).map(event => ({
-            ...event,
-            id: generateUniqueId(event) // Assign unique ID
-        }));
-    } catch (err) {
-        console.error("Failed to fetch events:", err);
-        error = "Failed to fetch events.";
-    } finally {
-        isLoading = false;
+        detectCityAndFetchEvents();
+        fetchSupabaseEvents();
+    });
+  
+    async function getEvents() {
+        if (isLoading) return;
+        isLoading = true;
+  
+        try {
+            // ✅ Use baseUrl correctly
+            const url = `${baseUrl}/.netlify/functions/get-events?city=${encodeURIComponent(currentCity)}`;
+            const res = await fetch(url);
+  
+            if (!res.ok) {
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+  
+            const data = await res.json();
+            console.log("Fetched events:", data);
+  
+            events = (data.events_results || []).map(event => ({
+                ...event,
+                id: `event-${event.title.replace(/\s+/g, '-').toLowerCase()}-${event.link.split('/').pop()}`
+            }));
+        } catch (err) {
+            console.error("Failed to fetch events:", err);
+            error = "Failed to fetch events.";
+        } finally {
+            isLoading = false;
+        }
     }
-}
-
-  // Function to detect user's city and update `currentCity`
-  function detectCityAndFetchEvents() {
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-              async (pos) => {
-                  const { latitude, longitude } = pos.coords;
-
-                  try {
-                      const response = await fetch(
-                          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                      );
-                      const data = await response.json();
-
-                      currentCity = data.address?.city || data.address?.town || data.address?.village || "Unknown Location";
-                      getEvents(); // Fetch events after detecting city
-                  } catch (err) {
-                      console.error("Error fetching city:", err);
-                      error = "Failed to fetch city.";
-                  }
-              },
-              (err) => {
-                  console.error("Geolocation error:", err.message);
-                  error = "Unable to retrieve location.";
-              }
-          );
-      } else {
-          console.error("Geolocation is not supported by this browser.");
-          error = "Geolocation is not supported.";
-      }
-  }
-</script>
+  
+  </script>
+  
 
 
 <!-- <style>
