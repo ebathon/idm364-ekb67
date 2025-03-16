@@ -7,8 +7,8 @@
   import profile from '$lib/image/profile_nav.png';
   import { supabase } from '$lib/supabaseClient';
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://serpapi.com/searches/";
-  
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
+
   let currentCity = "Unknown";
   let events = []; // API events
   let supabaseEvents = []; // Supabase events
@@ -52,12 +52,13 @@
   }
 
   // Function to fetch API-based events based on the detected city
-  async function getEvents() {
+
+async function getEvents() {
     if (isLoading) return;
     isLoading = true;
 
     try {
-        const url = `${baseUrl}/api/events?city=${encodeURIComponent(currentCity)}`;
+        const url = `${baseUrl}/.netlify/functions/get-events?city=${encodeURIComponent(currentCity)}`;
         const res = await fetch(url);
 
         if (!res.ok) {
@@ -72,7 +73,7 @@
             id: generateUniqueId(event) // Assign unique ID
         }));
     } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch events:", err);
         error = "Failed to fetch events.";
     } finally {
         isLoading = false;
