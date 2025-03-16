@@ -51,38 +51,31 @@
 
   // Function to fetch API-based events based on the detected city
   async function getEvents() {
-      if (isLoading) return;
-      isLoading = true;
+    if (isLoading) return;
+    isLoading = true;
 
-      try {
-        const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+    try {
+        const url = `${baseUrl}/api/events?city=${encodeURIComponent(currentCity)}`;
         const res = await fetch(url);
 
-          if (!res.ok) {
-              throw new Error(`HTTP error! Status: ${res.status}`);
-          }
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
 
-          const data = await res.json();
-          console.log("Fetched events:", data);
+        const data = await res.json();
+        console.log("Fetched events:", data);
 
-          // Assign unique ID and filter duplicates
-          const newEvents = (data.events_results || []).map(event => ({
-              ...event,
-              id: generateUniqueId(event) // Ensure unique ID
-          }));
-
-          // Filter out duplicates before appending
-          const uniqueNewEvents = newEvents.filter(newEvent => !events.some(e => e.id === newEvent.id));
-
-          events = [...events, ...uniqueNewEvents]; // Append only unique events
-          nextPageToken = data.nextPageToken || null; // Update nextPageToken for pagination
-      } catch (err) {
-          console.error(err);
-          error = "Failed to fetch events.";
-      } finally {
-          isLoading = false;
-      }
-  }
+        events = (data.events_results || []).map(event => ({
+            ...event,
+            id: generateUniqueId(event) // Assign unique ID
+        }));
+    } catch (err) {
+        console.error(err);
+        error = "Failed to fetch events.";
+    } finally {
+        isLoading = false;
+    }
+}
 
   // Function to detect user's city and update `currentCity`
   function detectCityAndFetchEvents() {
