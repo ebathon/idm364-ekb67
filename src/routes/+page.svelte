@@ -509,7 +509,7 @@ menu img {
                    </svg>
                   </button>
                   <a href={event.link} target="_blank">
-                      <img src={event.thumbnail || "https://via.placeholder.com/150"} alt="Event Thumbnail" class="thumbnail"/>
+                      <img src={event.thumbnail || "https://placehold.co/150"} alt="Event Thumbnail" class="thumbnail"/>
                       <strong>{event.title}</strong>
                   </a>
                   <p>{event.date?.when || "No date available"}</p>
