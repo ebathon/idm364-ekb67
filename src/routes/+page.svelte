@@ -55,7 +55,7 @@
       isLoading = true;
 
       try {
-          const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+          const url = `https://serpapi.com/api/events?city=${encodeURIComponent(currentCity)}`;
           const res = await fetch(url);
 
           if (!res.ok) {
