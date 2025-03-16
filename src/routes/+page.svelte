@@ -7,7 +7,7 @@
   import profile from '$lib/image/profile_nav.png';
   import { supabase } from '$lib/supabaseClient';
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://serpapi.com/searches/";
   
   let currentCity = "Unknown";
   let events = []; // API events
