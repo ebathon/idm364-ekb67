@@ -1,7 +1,3 @@
-plugins = []
-headers = []
-redirects = []
-
 [build]
   command = "npm run build"
   publish = "build"
@@ -16,25 +12,7 @@ redirects = []
   status = 200
   force = true
 
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-
-[functions."*"]
-
-[build.environment]
-
-[build.processing]
-
-[build.processing.css]
-
-[build.processing.html]
-
-[build.processing.images]
-
-[build.processing.js]
-
-[build.services]
