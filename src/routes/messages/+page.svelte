@@ -58,18 +58,24 @@
 
 <div class="toggle-container">
 <div class="toggle-slider {activeTab === 'myMessages' ? 'left' : 'right'}"></div>
-<div 
+<a 
   class="toggle-option {activeTab === 'myMessages' ? 'active' : ''}" 
   on:click={() => toggleTab('myMessages')}
+  on:keydown={(event) => { if (event.key === "Enter" || event.key === " ") toggleTab('myMessages'); }}
+  tabindex="0"
+  href="/messenger"
 >
   My Messages
-</div>
-<div 
+</a>
+
+<a 
   class="toggle-option {activeTab === 'requests' ? 'active' : ''}"
   on:click={() => toggleTab('requests')}
+  on:keydown={(event) => { if (event.key === "Enter" || event.key === " ") toggleTab('requests'); }}
+  tabindex="0" href="/messenger"
 >
   Message Requests <span class="message-requests-badge">{messagesData.requests.length}</span>
-</div>
+</a>
 </div>
 
 <div class="content">
