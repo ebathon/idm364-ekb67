@@ -5,7 +5,6 @@ redirects = []
 [build]
   command = "npm run build"
   publish = "build"
-  functions = "netlify/functions"
 
 [functions]
   node_bundler = "esbuild"
