@@ -2,23 +2,28 @@ plugins = []
 headers = []
 redirects = []
 
+[build]
+  command = "npm run build"
+  publish = "build"
+  functions = "netlify/functions"
+
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["node-fetch"]
 
 [[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/index.html"
   status = 200
 
-[functions."*"]
 
-[build]
-publish = "build"
-publishOrigin = "ui"
-commandOrigin = "ui"
-command = "npm run build"
-functions = "netlify/functions"
+[functions."*"]
 
 [build.environment]
 
