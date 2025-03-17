@@ -1,12 +1,3 @@
 [build]
   command = "npm run build"
-  publish = "build" # or ".svelte-kit/netlify" depending on your adapter config
-
-[build.environment]
-  NODE_VERSION = "22.14.0" # or whatever version you're using
-
-# Handle SPA routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  publish = "build"

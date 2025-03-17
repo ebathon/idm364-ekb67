@@ -1,2 +1,3 @@
-/api/* /.netlify/functions/:splat 200!
+/old-page /new-page 301
+/api/* https://your-api-server.com/:splat 200
 /* /index.html 200
