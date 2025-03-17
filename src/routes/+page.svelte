@@ -8,6 +8,7 @@
   import { supabase } from '$lib/supabaseClient';
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
+  console.log("Base URL:", baseUrl)
 
   let currentCity = "Unknown";
   let events = []; // API events
