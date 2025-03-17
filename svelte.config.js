@@ -4,7 +4,7 @@ import { sveltePreprocess }  from 'svelte-preprocess';
 
 export default {
 	kit: {
-		adapter: adapter()
+		adapter: adapter({})
 	  },
 	  preprocess: { sveltePreprocess }
 		};
