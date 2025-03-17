@@ -1,17 +1,15 @@
-import adapter from '@sveltejs/adapter-netlify';
+import preprocess from "svelte-preprocess";
+import adapter from "@sveltejs/adapter-auto";
+import dotenv from "dotenv";
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
+dotenv.config();
+
+export default {
+  preprocess: preprocess(),
   kit: {
-    // Specify the adapter with explicit configuration
-    adapter: adapter({
-      // Edge should be false unless you're specifically using Netlify Edge Functions
-      edge: false,
-      
-      // This helps ensure proper static file generation
-      split: false
-    })
-  }
+    adapter: adapter(),
+    env: {
+      dir: process.cwd(),
+    },
+  },
 };
-
-export default config;

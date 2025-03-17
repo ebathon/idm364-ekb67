@@ -51,35 +51,26 @@
 
   // Function to fetch API-based events based on the detected city
 
-async function getEvents() {
-    if (isLoading) return;
-    isLoading = true;
+  async function getEvents() {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:5174/api";
+const url = `${baseUrl}/events?city=${encodeURIComponent(currentCity)}`;
 
-    try {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL; 
+try {
+    const res = await fetch(url);
 
-        const url = `${baseUrl}/get-events?city=${encodeURIComponent(currentCity)}`;
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-
-        const data = await res.json();
-        console.log("Fetched events:", data);
-
-        events = (data.events_results || []).map(event => ({
-            ...event,
-            id: generateUniqueId(event) // Assign unique ID
-        }));
-    } catch (err) {
-        console.error("Failed to fetch events:", err);
-        error = "Failed to fetch events.";
-    } finally {
-        isLoading = false;
+    if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
     }
+
+    const data = await res.json();
+    events = data;
+} catch (err) {
+    console.error("Failed to fetch events:", err);
 }
 
+}
+
+onMount(getEvents);
   // Function to detect user's city and update `currentCity`
   function detectCityAndFetchEvents() {
       if (navigator.geolocation) {
