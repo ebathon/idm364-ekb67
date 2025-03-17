@@ -514,7 +514,7 @@ menu img {
           {/each}
       </div>
 
-      <h3>Supabase Events :3</h3>
+      <h3>Supabase Events</h3>
       <div class="events-container">
           {#each supabaseEvents as item (item.id)}
               <div class="events">
