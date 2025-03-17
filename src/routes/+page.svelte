@@ -7,9 +7,6 @@
   import profile from '$lib/image/profile_nav.png';
   import { supabase } from '$lib/supabaseClient';
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://happenjrproject.netlify.app";
-  console.log("Base URL:", baseUrl)
-
   let currentCity = "Unknown";
   let events = []; // API events
   let supabaseEvents = []; // Supabase events
@@ -59,7 +56,9 @@ async function getEvents() {
     isLoading = true;
 
     try {
-        const url = `${baseUrl}/.netlify/functions/get-events?city=${encodeURIComponent(currentCity)}`;
+        const baseUrl = import.meta.env.VITE_API_BASE_URL; 
+
+        const url = `${baseUrl}/get-events?city=${encodeURIComponent(currentCity)}`;
         const res = await fetch(url);
 
         if (!res.ok) {
