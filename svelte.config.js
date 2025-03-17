@@ -1,22 +1,16 @@
 import adapter from '@sveltejs/adapter-netlify';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+// Fix the import - use the correct location based on your SvelteKit version
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+// OR if using an older version, you might not need vitePreprocess at all
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Preprocess your Svelte components
-  preprocess: vitePreprocess(),
+  preprocess: vitePreprocess(), // Remove this line if import isn't available
   
   kit: {
     // Adapter for Netlify
-    adapter: adapter({
-      // If your routes are nested, edge functions can help
-      edge: false,
-      
-      // Split your app into smaller chunks
-      split: false
-    }),
-    
-    // You can add aliases, paths, etc. here
+    adapter: adapter()
   }
 };
 
