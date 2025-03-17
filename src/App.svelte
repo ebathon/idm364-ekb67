@@ -1,5 +1,5 @@
 <script>
-    import HomePage from "./routes/+page.svelte";
+    import HomePage from "./routes/home/page.svelte";
 </script>
 
 <main>
