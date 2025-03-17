@@ -1,13 +1,17 @@
 import adapter from '@sveltejs/adapter-netlify';
-import preprocess from 'svelte-preprocess';
 
-
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
   kit: {
-    adapter: adapter(),
-    alias: {
-      $lib: './src/lib'
-    }
-  },
-  preprocess: preprocess()
+    // Specify the adapter with explicit configuration
+    adapter: adapter({
+      // Edge should be false unless you're specifically using Netlify Edge Functions
+      edge: false,
+      
+      // This helps ensure proper static file generation
+      split: false
+    })
+  }
 };
+
+export default config;

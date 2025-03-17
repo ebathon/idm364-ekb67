@@ -51,12 +51,15 @@
 	}
 
 	// Function to fetch API-based events based on the detected city
+
 	async function getEvents() {
 		if (isLoading) return;
 		isLoading = true;
 
 		try {
-			const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+			const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+			const url = `${baseUrl}/get-events?city=${encodeURIComponent(currentCity)}`;
 			const res = await fetch(url);
 
 			if (!res.ok) {
@@ -66,21 +69,12 @@
 			const data = await res.json();
 			console.log('Fetched events:', data);
 
-			// Assign unique ID and filter duplicates
-			const newEvents = (data.events_results || []).map((event) => ({
+			events = (data.events_results || []).map((event) => ({
 				...event,
-				id: generateUniqueId(event) // Ensure unique ID
+				id: generateUniqueId(event) // Assign unique ID
 			}));
-
-			// Filter out duplicates before appending
-			const uniqueNewEvents = newEvents.filter(
-				(newEvent) => !events.some((e) => e.id === newEvent.id)
-			);
-
-			events = [...events, ...uniqueNewEvents]; // Append only unique events
-			nextPageToken = data.nextPageToken || null; // Update nextPageToken for pagination
 		} catch (err) {
-			console.error(err);
+			console.error('Failed to fetch events:', err);
 			error = 'Failed to fetch events.';
 		} finally {
 			isLoading = false;
@@ -212,6 +206,99 @@
 <!-- Navigation Menu -->
 <menu>
 	<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
+	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
+	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
+	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
+</menu>
+<!-- Header -->
+<header>
+	<div class="log"><a href="signin.html">Sign in</a></div>
+	<div>Happen</div>
+	<div class="setting">
+		<img src={setting} height="28" width="28" alt="Settings" />
+	</div>
+</header>
+
+<!-- Main Content -->
+<div class="content">
+	<h2 class="main_home_title">Current City: {currentCity}</h2>
+
+	{#if error}
+		<p class="error">{error}</p>
+	{:else}
+		<h3>API Events in {currentCity}</h3>
+		<div class="events-container">
+			{#each events as event (event.id)}
+				<div class="events">
+					<button
+						class="favorite-btn"
+						on:click={() => toggleFavorite(event.id)}
+						aria-label={favoriteEvents.includes(event.id)
+							? 'Remove from favorites'
+							: 'Add to favorites'}
+					>
+						<svg
+							class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}"
+							viewBox="0 0 24 24"
+						>
+							<path
+								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+							></path>
+						</svg>
+					</button>
+					<a href={event.link} target="_blank">
+						<img
+							src={event.thumbnail || 'https://placehold.co/150'}
+							alt="Event Thumbnail"
+							class="thumbnail"
+						/>
+						<strong>{event.title}</strong>
+					</a>
+					<p>{event.date?.when || 'No date available'}</p>
+					<p class="describe">{event.description || 'No description available.'}</p>
+				</div>
+			{/each}
+		</div>
+
+		<h3>Supabase Events</h3>
+		<div class="events-container">
+			{#each supabaseEvents as item (item.id)}
+				<div class="events">
+					<button
+						class="favorite-btn"
+						on:click={() => toggleFavorite(item.id)}
+						aria-label={favoriteEvents.includes(item.id)
+							? 'Remove from favorites'
+							: 'Add to favorites'}
+					>
+						<svg
+							class="heart-icon {favoriteEvents.includes(item.id) ? 'active' : ''}"
+							viewBox="0 0 24 24"
+						>
+							<path
+								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+							></path>
+						</svg>
+					</button>
+					<a href={item.link} target="_blank">
+						<img
+							src={item.image || 'https://placehold.co/150'}
+							alt="Event Thumbnail"
+							class="thumbnail"
+						/>
+						<strong>{item.name}</strong>
+					</a>
+					<p>{item.date || 'No date available'}</p>
+					<p class="describe">{item.description || 'No description available.'}</p>
+				</div>
+			{/each}
+		</div>
+	{/if}
+</div>
+
+<!-- Navigation Menu -->
+<menu>
+	<div class="active" id="home"><img src={home} height="60" width="60" alt="Home" /></div>
 	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
 	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
 	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
