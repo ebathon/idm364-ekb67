@@ -58,7 +58,7 @@ async function getEvents() {
     try {
         const baseUrl = import.meta.env.VITE_API_BASE_URL; 
 
-        const url = `${baseUrl}/.netlify/functions/get-events?city=${encodeURIComponent(currentCity)}`;
+        const url = `${baseUrl}/get-events?city=${encodeURIComponent(currentCity)}`;
         const res = await fetch(url);
 
         if (!res.ok) {
