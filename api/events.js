@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Example static response (Replace with actual API logic)
         res.status(200).json({
             events_results: [
                 {
