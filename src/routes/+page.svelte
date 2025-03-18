@@ -179,7 +179,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(event.id)}
+						onclick={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -198,7 +198,7 @@
 							src={event.thumbnail || 'https://placehold.co/150'}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title}</strong>
 					</a>
@@ -214,7 +214,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(item.id)}
+						onclick={() => toggleFavorite(item.id)}
 						aria-label={favoriteEvents.includes(item.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -233,7 +233,7 @@
 							src={item.image_path ? `/events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{item.name}</strong>
 					</a>
@@ -250,7 +250,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(event.id)}
+						onclick={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -269,7 +269,7 @@
 							src={event.thumbnail || 'https://placehold.co/150'}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title}</strong>
 					</a>
