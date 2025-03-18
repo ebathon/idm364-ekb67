@@ -86,11 +86,11 @@
 	}
 	
 	function goNext() {
-		goto('/lifestyle/2');
+		goto('/sign_in/11');
 	}
 	
 	function skipSection() {
-		goto('/lifestyle/2');
+		goto('/sign_in/11');
 	}
 	
 	// Toggle custom dropdowns
@@ -184,7 +184,7 @@
 		</div>
 		
 		<div class="form-field">
-			<label for="school-input">Where are you studying?</label>
+			<label for="school-input">Where are you studying? (If applicable)</label>
 			<div class="input-wrapper">
 				<input 
 					type="text" 
