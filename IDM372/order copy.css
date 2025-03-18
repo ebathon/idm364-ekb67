@@ -1,196 +1,194 @@
-html{
-    font-family: "Poppins";
+html {
+  font-family: "Poppins";
 }
 
 @font-face {
-    src: url("../font/PermanentMarker-Regular.ttf");
-    font-family: 'PermanentMarker-Regular';
+  src: url("../font/PermanentMarker-Regular.ttf");
+  font-family: "PermanentMarker-Regular";
 }
 @font-face {
-    src: url("../font/Piazzolla_24pt-Bold.ttf");
-    font-family: 'Piazzolla_24pt-Bold';
+  src: url("../font/Piazzolla_24pt-Bold.ttf");
+  font-family: "Piazzolla_24pt-Bold";
 }
 @font-face {
-    src: url("../font/Fredoka-VariableFont_wdth,wght.ttf");
-    font-family: 'Fredoka';
+  src: url("../font/Fredoka-VariableFont_wdth,wght.ttf");
+  font-family: "Fredoka";
 }
 
 title {
-    font-family: 'Fredoka';
-    font-size: 2rem;
+  font-family: "Fredoka";
+  font-size: 2rem;
 }
 
 .title {
-    font-family: 'Fredoka';
-    font-size: 2rem;
+  font-family: "Fredoka";
+  font-size: 2rem;
 }
 
-.order_title{
-    font-size: 1.75rem;
-    font-weight: bold;
-    font-family: 'Fredoka';
+.order_title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  font-family: "Fredoka";
 }
 
-.order_list{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+.order_list {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
-.order_list a{
-    color: black;
-    font-size: 1rem;
-    font-family: 'Mobile-Standard';
+.order_list a {
+  color: black;
+  font-size: 1rem;
+  font-family: "Mobile-Standard";
 }
-.order_shop_list{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr; 
-    /*flex-direction: column;*/
-    margin-top: 20px;
+.order_shop_list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  /*flex-direction: column;*/
+  margin-top: 20px;
 }
-.order_shop_list>form{
-    margin: 10px;
+.order_shop_list > form {
+  margin: 10px;
 }
-.order_shop_list img{
-    width: 100%;
+.order_shop_list img {
+  width: 100%;
 }
 
 h1 {
-    font-family: 'Button-Text';
-    font-size: 1rem;
-    color: white;
+  font-family: "Button-Text";
+  font-size: 1rem;
+  color: white;
 }
 
 p {
-    font-family: "Mobile-Standard";
-    font-size: 1rem;
-    color: white;
-    text-align: center;
+  font-family: "Mobile-Standard";
+  font-size: 1rem;
+  color: white;
+  text-align: center;
 }
 
 .button-text-smoothie {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  flex-direction: column;
 }
 
 .button {
-    width: 100%; 
-    min-height: 250px; 
-    max-height: 300px; 
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: .5rem;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+  width: 100%;
+  min-height: 250px;
+  max-height: 300px;
+  border: 1px solid black;
+  border-radius: 25px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.button-content>img {
-    width: auto; 
-    height: 200px; 
-    padding: 0.25rem;
-    margin: 0.25rem;
-    object-fit: contain; 
+.button-content > img {
+  width: auto;
+  height: 200px;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  object-fit: contain;
 }
 
 .button-content {
-    display: flex;
-    justify-content: space-around; 
-    align-items: center;
-    flex-direction: row-reverse;
-    width: 100%; 
-    height: 100%; 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row-reverse;
+  width: 100%;
+  height: 100%;
 }
 
 .pb_and_banana_smoothie .button {
-    background: linear-gradient(to right, #FFF2AC 10%, #5B965E 100%)
+  background: linear-gradient(to right, #fff2ac 10%, #5b965e 100%);
 }
 
 .taro_smoothie .button {
-    background: linear-gradient(to right, #BB9BCA 10%, #5B965E 100%)
+  background: linear-gradient(to right, #bb9bca 10%, #5b965e 100%);
 }
 
 .fruit_salad .button {
-    background: linear-gradient(to right, #018FC6 10%, #5B965E 100%)
+  background: linear-gradient(to right, #018fc6 10%, #5b965e 100%);
 }
 
 .custom_berry_smoothie .button {
-    background: linear-gradient(to right, #3F54A8 10%, #5B965E 100%)
+  background: linear-gradient(to right, #3f54a8 10%, #5b965e 100%);
 }
 
 .custom_mango_smoothie .button {
-    background: linear-gradient(to right, #FFD662 10%, #5B965E 100%)
+  background: linear-gradient(to right, #ffd662 10%, #5b965e 100%);
 }
 
 .custom_smoothie .button {
-    background: linear-gradient(to right, #FF9999 10%, #5B965E 100%)
+  background: linear-gradient(to right, #ff9999 10%, #5b965e 100%);
 }
 
-
-.xy_con{
-    max-width: 960px;
+.xy_con {
+  max-width: 960px;
+  margin: 40px auto;
+}
+@media screen and (max-width: 960px) {
+  .order_shop_list {
+    overflow-x: hidden;
+    position: relative;
+  }
+  .order_shop_list {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  .xy_con {
+    width: 80%;
     margin: 40px auto;
-}
-@media screen and (max-width: 960px){
-    .order_shop_list{
-        overflow-x: hidden;
-        position: relative;
-    }
-    .order_shop_list{
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-    }
-    .xy_con{
-        width: 80%;
-        margin: 40px auto;
-    }
-    .order_shop_list{
-        width: 100%;
-        margin-top: 20px;
-    }
-    .order_shop_list>form{
-        position: relative;
-    }
-    .button{
-        max-height: auto;
-        min-height: auto;
-        padding:20px 10px;
-        text-align: left;
-    }
-    
-    .button-content>img {
-        width: auto;
-        padding: 0.5rem;
-        margin: 0.25rem;
-        object-fit: contain;
-        box-sizing: border-box;
-        width: 120px;
-        height: auto;
-    }
-    .button-text-smoothie h1{
-        font-size:20px;
-        text-align: left;
-    }
-    .button-text-smoothie {
-        /* margin-bottom: 2rem; */
-    }
-    
+  }
+  .order_shop_list {
+    width: 100%;
+    margin-top: 20px;
+  }
+  .order_shop_list > form {
+    position: relative;
+  }
+  .button {
+    max-height: auto;
+    min-height: auto;
+    padding: 20px 10px;
+    text-align: left;
+  }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+  .button-content > img {
+    width: auto;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    object-fit: contain;
+    box-sizing: border-box;
+    width: 120px;
+    height: auto;
+  }
+  .button-text-smoothie h1 {
+    font-size: 20px;
+    text-align: left;
+  }
+  .button-text-smoothie {
+    /* margin-bottom: 2rem; */
+  }
 
-    p {
-        font-size: 1rem;
-        text-align: center;
-    }
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    text-align: center;
+  }
 }
 
-@media screen and (max-width: 768px){
-    /* .order_list a{
+@media screen and (max-width: 768px) {
+  /* .order_list a{
         color: black;
         font-size: 18px;
     }
@@ -232,15 +230,13 @@ p {
     .button-text-smoothie {
         margin-bottom: 2rem;
     } */
-    
 
-    h1 {
-        font-size: 1.5rem;
-    }
+  h1 {
+    font-size: 1.5rem;
+  }
 
-    p {
-        font-size: 1rem;
-        text-align: center;
-    }
-    
+  p {
+    font-size: 1rem;
+    text-align: center;
+  }
 }
