@@ -179,7 +179,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						onclick={() => toggleFavorite(event.id)}
+						on:click={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -198,7 +198,7 @@
 							src={event.thumbnail || 'https://placehold.co/150'}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title}</strong>
 					</a>
@@ -214,7 +214,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						onclick={() => toggleFavorite(item.id)}
+						on:click={() => toggleFavorite(item.id)}
 						aria-label={favoriteEvents.includes(item.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -233,7 +233,7 @@
 							src={item.image_path ? `/events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{item.name}</strong>
 					</a>
@@ -250,7 +250,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						onclick={() => toggleFavorite(event.id)}
+						on:click={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -269,7 +269,7 @@
 							src={event.thumbnail || 'https://placehold.co/150'}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title}</strong>
 					</a>
@@ -285,224 +285,14 @@
 <menu>
 	<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
 	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
+	<div><a href="/messages"><img src={message} height="60" width="60" alt="Messages" /></a></div>
+	<div><a href="profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
 </menu>
-<!-- Header -->
-<header>
-	<div class="log"><a href="signin.html">Sign in</a></div>
-	<div>Happen</div>
-	<div class="setting">
-		<img src={setting} height="28" width="28" alt="Settings" />
-	</div>
-</header>
-
-<!-- Main Content -->
-<div class="content">
-	<h2 class="main_home_title">Current City: {currentCity}</h2>
-
-	{#if error}
-		<p class="error">{error}</p>
-	{:else}
-		<h3>API Events in {currentCity}</h3>
-		<div class="events-container">
-			{#each events as event (event.id)}
-				<div class="events">
-					<button
-						class="favorite-btn"
-						onclick={() => toggleFavorite(event.id)}
-						aria-label={favoriteEvents.includes(event.id)
-							? 'Remove from favorites'
-							: 'Add to favorites'}
-					>
-						<svg
-							class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}"
-							viewBox="0 0 24 24"
-						>
-							<path
-								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-							></path>
-						</svg>
-					</button>
-					<a href={event.link} target="_blank">
-						<img
-							src={event.thumbnail || 'https://placehold.co/150'}
-							alt="Event Thumbnail"
-							class="thumbnail"
-						/>
-						<strong>{event.title}</strong>
-					</a>
-					<p>{event.date?.when || 'No date available'}</p>
-					<p class="describe">{event.description || 'No description available.'}</p>
-				</div>
-			{/each}
-		</div>
-
-		<h3>Supabase Events</h3>
-		<div class="events-container">
-			{#each supabaseEvents as item (item.id)}
-				<div class="events">
-					<button
-						class="favorite-btn"
-						onclick={() => toggleFavorite(item.id)}
-						aria-label={favoriteEvents.includes(item.id)
-							? 'Remove from favorites'
-							: 'Add to favorites'}
-					>
-						<svg
-							class="heart-icon {favoriteEvents.includes(item.id) ? 'active' : ''}"
-							viewBox="0 0 24 24"
-						>
-							<path
-								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-							></path>
-						</svg>
-					</button>
-					<a href={item.link} target="_blank">
-						<img
-							src={item.image || 'https://placehold.co/150'}
-							alt="Event Thumbnail"
-							class="thumbnail"
-						/>
-						<strong>{item.name}</strong>
-					</a>
-					<p>{item.date || 'No date available'}</p>
-					<p class="describe">{item.description || 'No description available.'}</p>
-				</div>
-			{/each}
-		</div>
-	{/if}
-</div>
-
-<!-- Navigation Menu -->
-<menu>
-	<div class="active" id="home"><img src={home} height="60" width="60" alt="Home" /></div>
-	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
-</menu>
-
-<!-- <style>
-     @import url('https://fonts.googleapis.com/css2?family=Pathway+Extreme:wght@400;600;700&display=swap');
-	
-	* {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    img {
-        display: block;
-    }
-
-  header {
-    background-image: linear-gradient(#d3b9ff, rgb(255, 255, 255));
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    font-size: 16px;
-  }
-
-  .app-title {
-    font-family: 'Pathway Extreme', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: #5f2eea; /* Purple color to match the gradient */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-    letter-spacing: 1px;
-  }
-
-    .log {
-        font-size: 20px;
-        text-decoration: underline;
-    }
-
-    .setting {
-        padding-left: 31px;
-    }
-
-    .content {
-        width: 100%;
-        overflow-y: auto;
-        background: #ffffff;
-    }
-
-    menu {
-        background-image: linear-gradient(rgb(255, 255, 255), #D3B9FF);
-        display: flex;
-        text-align: center;
-        font-family: "Poppins";
-        position: fixed;
-        left: 50%;
-        bottom: 10px;
-        transform: translateX(-50%);
-        border-radius: 10px;
-        padding: 10px;
-        width: 960px;
-        margin: auto;
-    }
-
-    menu img {
-        margin: auto;
-    }
-
-    .content {
-        height: calc(100vh - 78px);
-        padding: 15px 15px 100px 15px;
-    }
-
-    .events-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 10px;
-        justify-content: center;
-    }
-
-    .events-container .events {
-        width: 220px;
-        border: 3px solid black;
-        padding: 10px;
-        text-align: center;
-        border-radius: 8px;
-        background-color: white;
-    }
-
-    .events-container img {
-        object-fit: cover;
-        align-content: center;
-        width: 100%;
-        border-radius: 5px;
-    }
-
-    .load-more {
-        display: block;
-        margin: 20px auto;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-family: "Poppins";
-        background-color: #482C2C;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .load-more:hover {
-        background-color: #6a3f3f;
-    }
-
-    .load-more:disabled {
-        background-color: #bbb;
-        cursor: not-allowed;
-    }
-</style> -->
 
 <style>
-	/* Import Nunito font from Google Fonts */
+	/* Import fonts */
 	@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Pathway+Extreme:wght@400;600;700&display=swap');
 
 	* {
 		padding: 0;
@@ -528,6 +318,15 @@
 		align-items: center;
 		padding: 15px 20px;
 		font-size: 16px;
+	}
+
+	.app-title {
+		font-family: 'Pathway Extreme', sans-serif;
+		font-size: 24px;
+		font-weight: 550;
+		color: #5f2eea; /* Purple color to match the gradient */
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+		letter-spacing: 1px;
 	}
 
 	.log {
@@ -574,20 +373,24 @@
 
 	/* H3 styling with Nunito font */
 	h3 {
-		font-family: 'Nunito', sans-serif;
-		font-size: 24px;
-		font-weight: 600;
-		padding: 0 20px;
-		margin-bottom: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 0 20px;
+    margin-top: 10px;      /* Add top margin to create space between sections */
+    margin-bottom: 10px;   /* Increase bottom margin from 15px to 20px */
+	}
+	h3:first-of-type {
+    margin-top: 15px;
 	}
 
 	/* Events display */
 	.events-container {
-		display: flex;
-		overflow-x: auto;
-		gap: 15px;
-		padding: 0 20px;
-		scrollbar-width: none; /* Hide scrollbar for Firefox */
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 0 20px 10px;  /* Add bottom padding of 20px */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
 	}
 
 	.events-container::-webkit-scrollbar {
@@ -675,7 +478,6 @@
 		right: 0;
 		margin: 0;
 		padding: 10px 0;
-
 		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
 	}
 
@@ -696,66 +498,12 @@
 		height: 60px;
 	}
 
-	.events-container {
-		display: flex;
-		overflow-x: auto;
-		gap: 15px;
-		padding: 0 20px;
-		scrollbar-width: none; /* Hide scrollbar for Firefox */
-	}
-
-	.events-container::-webkit-scrollbar {
-		display: none; /* Hide scrollbar for Chrome/Safari */
-	}
-
-	.events {
-		flex: 0 0 auto;
-		width: 220px;
-		border-radius: 12px;
-		overflow: hidden;
-		position: relative;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-		border: none;
-		padding: 0;
-		background: white;
-	}
-
-	.events img {
-		width: 100%;
-		height: 120px;
-		object-fit: cover;
-		border-radius: 0;
-	}
-
-	.events a {
-		text-decoration: none;
-		color: black;
-	}
-
-	.events strong {
-		display: block;
+	.error {
+		color: #e53935;
+		padding: 15px 20px;
+		margin-bottom: 15px;
+		background-color: #ffebee;
+		border-radius: 8px;
 		font-size: 14px;
-		margin: 10px 10px 5px 10px;
-	}
-
-	.events p {
-		font-size: 12px;
-		color: #666;
-		margin: 0 10px 10px 10px;
-	}
-
-	.favorite-btn {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		width: 32px;
-		height: 32px;
-		background-color: rgba(255, 255, 255, 0.8);
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: none;
-		cursor: pointer;
 	}
 </style>

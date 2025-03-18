@@ -5,13 +5,16 @@
 	let locationDetected = false;
 	let userLocation = '';
 	let locationAllowed = false;
+	let buttonEnabled = false; // Added for button state
 
 	function goBack() {
 		history.back();
 	}
 
 	function goNext() {
-		goto('/sign_in/7');
+		if (buttonEnabled) {
+			goto('/sign_in/7');
+		}
 	}
 
 	function requestLocationPermission() {
@@ -29,8 +32,6 @@
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
-					// Here you would use a geocoding service to get the city and state
-					// For this example, we're just setting it directly
 					userLocation = 'Philadelphia, PA';
 					locationDetected = true;
 				},
@@ -42,6 +43,9 @@
 		}
 		*/
 	}
+
+	// Enable button when location is detected
+	$: buttonEnabled = locationDetected;
 </script>
 
 <div class="container">
@@ -114,7 +118,11 @@
 		{/if}
 	</div>
 
-	<button class="next-button" on:click={goNext}>
+	<button
+		class="next-button {buttonEnabled ? 'active' : 'disabled'}"
+		on:click={goNext}
+		disabled={!buttonEnabled}
+	>
 		Next <span class="arrow">›</span>
 	</button>
 </div>
@@ -207,7 +215,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		
 		text-align: center;
 	}
 
@@ -273,7 +280,7 @@
 		padding: 20px;
 		border-radius: 10px;
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-		margin-top:60px;
+		margin-top: 60px;
 		margin-bottom: 30px;
 		width: 100%;
 		max-width: 300px;
@@ -302,9 +309,9 @@
 		font-size: 15px;
 	}
 
-	/* Next button */
+	/* Next button - Updated to match birthday page */
 	.next-button {
-		background-color: #7848FB;
+		background-color: #b388ff;
 		color: white;
 		border: none;
 		border-radius: 30px;
@@ -317,6 +324,17 @@
 		margin: 20px;
 		font-family: 'Nunito', sans-serif;
 		margin-top: auto;
+	}
+
+	.next-button.disabled {
+		background-color: #cccccc;
+		cursor: not-allowed;
+		opacity: 0.7;
+	}
+
+	.next-button.active {
+		background-color: #7848FB;
+		cursor: pointer;
 	}
 
 	.arrow {

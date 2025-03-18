@@ -1,6 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import JoshDog from '$lib/image/Josh_Dog.jpeg';
+	import JoshOutside from '$lib/image/Josh_Outside.jpeg';
+	import JoshBeach from '$lib/image/Josh_beach.jpeg';
+	import JoshHike from '$lib/image/JoshHike.jpeg';
+	import JoshPool from '$lib/image/JoshPool.jpeg';
+	import JoshWinter from '$lib/image/joshWinter.jpeg';
 
 	// State for photos
 	let photos = Array(6).fill(null);
@@ -11,14 +17,14 @@
 	// Button state
 	let finishButtonEnabled = false;
 	
-	// Sample photo library images
-	const libraryPhotos = [
-		{ id: 1, url: 'https://via.placeholder.com/150/92c952', selected: false },
-		{ id: 2, url: 'https://via.placeholder.com/150/771796', selected: false },
-		{ id: 3, url: 'https://via.placeholder.com/150/24f355', selected: false },
-		{ id: 4, url: 'https://via.placeholder.com/150/d32776', selected: false },
-		{ id: 5, url: 'https://via.placeholder.com/150/f66b97', selected: false },
-		{ id: 6, url: 'https://via.placeholder.com/150/56a8c2', selected: false }
+	// Photo library images with imported assets
+	let libraryPhotos = [
+		{ id: 1, url: JoshDog, selected: false },
+		{ id: 2, url: JoshOutside, selected: false },
+		{ id: 3, url: JoshBeach, selected: false },
+		{ id: 4, url: JoshHike, selected: false },
+		{ id: 5, url: JoshPool, selected: false },
+		{ id: 6, url: JoshWinter, selected: false }
 	];
 	
 	// Update button state based on number of selected photos
@@ -47,7 +53,7 @@
 		showPermissionModal = false;
 		showPhotoLibrary = true;
 		// Reset selections
-		libraryPhotos.forEach(photo => photo.selected = false);
+		libraryPhotos = libraryPhotos.map(photo => ({ ...photo, selected: false }));
 		selectedLibraryPhotos = [];
 	}
 	
@@ -57,6 +63,9 @@
 	
 	function togglePhotoSelection(photo) {
 		photo.selected = !photo.selected;
+		
+		// Force reactivity by reassigning the array
+		libraryPhotos = [...libraryPhotos];
 		
 		if (photo.selected) {
 			selectedLibraryPhotos = [...selectedLibraryPhotos, photo];
@@ -173,7 +182,7 @@
 				</div>
 				
 				<div class="library-grid">
-					{#each libraryPhotos as photo}
+					{#each libraryPhotos as photo (photo.id)}
 						<div 
 							class="library-photo {photo.selected ? 'selected' : ''}" 
 							on:click={() => togglePhotoSelection(photo)}
@@ -461,6 +470,11 @@
 		aspect-ratio: 1;
 		cursor: pointer;
 		overflow: hidden;
+		border: 2px solid transparent;
+	}
+
+	.library-photo.selected {
+		border: 2px solid #007aff;
 	}
 
 	.library-photo img {
@@ -469,24 +483,23 @@
 		object-fit: cover;
 	}
 
-	.library-photo.selected::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background-color: rgba(0, 122, 255, 0.3);
-	}
-
 	.selection-indicator {
 		position: absolute;
 		bottom: 5px;
 		right: 5px;
 		width: 24px;
 		height: 24px;
-		border-radius: 12px;
 		background-color: #007aff;
+		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		z-index: 10; /* Ensure it’s on top */
+	}
+
+	.selection-indicator svg {
+		width: 18px;
+		height: 18px;
 	}
 
 	/* Responsive adjustments */

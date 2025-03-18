@@ -373,7 +373,7 @@
 	}
 
 	.next-button.active {
-		background-color: #8a70db;
+		background-color: #7848FB;
 		cursor: pointer;
 	}
 

@@ -12,9 +12,9 @@
 	// List of conversation prompts
 	const conversationPrompts = [
 		"What's something you're passionate about that most people might not expect?",
-		"Describe your ideal Sunday morning.",
+		"Something on my bucket list",
 		"What's a book or movie that changed how you see the world?",
-		"If you could master any skill instantly, what would it be and why?",
+		"Something you’d never guess about me",
 		"What's your favorite way to recharge after a difficult week?",
 		"What's a personal value you refuse to compromise on?",
 		"Share a travel experience that taught you something important.",

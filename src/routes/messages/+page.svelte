@@ -9,28 +9,29 @@
 	import profile from '$lib/image/profile_nav.png';
 
 	// Import user profile images
-	import David from '$lib/image/Msgs_David.png';
-	import Josh from '$lib/image/Msgs_Josh.png';
-	import Miles from '$lib/image/Msgs_Miles.png';
-	import Dan from '$lib/image/Msgs_Dan.png';
+	import Shelby from '$lib/image/Msgs_Shelby.png';
+	import Olivia from '$lib/image/Msgs_Olivia.png';
+	import Carly from '$lib/image/Msgs_Carly.png';
+	import Shayla from '$lib/image/Msgs_Shayla.png';
+	import Shari from '$lib/image/Msgs_Shari.png';
 
 	// Define message data
 	const messagesData = {
 		myMessages: [
 			{
 				id: 2,
-				name: 'Miles',
-				image: Miles,
-				text: 'Hey Elizabeth, How are you...',
+				name: 'Shelby',
+				image: Shelby,
+				text: 'Hey Josh, How are you...',
 				status: 'accepted',
 				icon: '✓',
 				color: '#E8F5E9'
 			},
 			{
 				id: 3,
-				name: 'David',
-				image: David,
-				text: 'Hey David, How are you...',
+				name: 'Olivia',
+				image: Olivia,
+				text: 'Hey Olivia, How are you...',
 				status: 'expiring soon',
 				icon: '⏱️',
 				color: '#FFF8E1'
@@ -39,8 +40,8 @@
 		requests: [
 			{
 				id: 1,
-				name: 'Josh',
-				image: Josh,
+				name: 'Carly',
+				image: Carly,
 				text: 'Hey Josh! I saw your profile and I think we have a lot of...',
 				status: 'pending',
 				icon: '⏱️',
@@ -48,17 +49,17 @@
 			},
 			{
 				id: 4,
-				name: 'Dan',
-				image: Dan,
-				text: 'Hey Elizabeth! I saw your profile and I think we have a lot of...',
+				name: 'Shayla',
+				image: Shayla,
+				text: 'Hey Josh! I saw your profile and I think we have a lot of...',
 				status: 'pending',
 				icon: '⏱️',
 				color: '#E3F2FD'
 			},
 			{
 				id: 5,
-				name: 'David',
-				image: David,
+				name: 'Shari',
+				image: Shari,
 				text: 'Hey! I saw you were interested in the bar crawl. I am planning on....',
 				status: 'pending',
 				icon: '⏱️',
@@ -253,7 +254,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+	
 		margin-bottom: 70px;
 	}
 

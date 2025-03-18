@@ -6,58 +6,60 @@
 	let feet = null;
 	let inches = null;
 	let hideHeight = false;
-	
+
 	// Dropdown states
 	let isFeetOpen = false;
 	let isInchesOpen = false;
-	
+
 	// Button state
 	let buttonEnabled = false;
-	
+
 	// Height options
 	const feetOptions = Array.from({ length: 8 }, (_, i) => i + 1); // 1-8 feet
 	const inchesOptions = Array.from({ length: 12 }, (_, i) => i); // 0-11 inches
-	
+
 	// Check if both height fields are selected to enable button
 	$: {
 		buttonEnabled = feet !== null && inches !== null;
 	}
-	
+
 	function goBack() {
 		history.back();
 	}
-	
+
 	function goNext() {
-		goto('/sign_in/10');
+		if (buttonEnabled) {
+			goto('/sign_in/10');
+		}
 	}
-	
+
 	// Toggle custom dropdowns
 	function toggleFeetDropdown() {
 		isFeetOpen = !isFeetOpen;
 		isInchesOpen = false;
 	}
-	
+
 	function toggleInchesDropdown() {
 		isInchesOpen = !isInchesOpen;
 		isFeetOpen = false;
 	}
-	
+
 	// Toggle height visibility preference
 	function toggleHideHeight() {
 		hideHeight = !hideHeight;
 	}
-	
+
 	// Select options in custom dropdowns
 	function selectFeet(value) {
 		feet = value;
 		isFeetOpen = false;
 	}
-	
+
 	function selectInches(value) {
 		inches = value;
 		isInchesOpen = false;
 	}
-	
+
 	// Close dropdowns when clicking outside
 	onMount(() => {
 		document.addEventListener('click', (event) => {
@@ -65,12 +67,16 @@
 			const inchesDropdown = document.getElementById('inches-dropdown');
 			const feetSelect = document.getElementById('feet-select');
 			const inchesSelect = document.getElementById('inches-select');
-			
+
 			if (feetDropdown && !feetDropdown.contains(event.target) && !feetSelect.contains(event.target)) {
 				isFeetOpen = false;
 			}
-			
-			if (inchesDropdown && !inchesDropdown.contains(event.target) && !inchesSelect.contains(event.target)) {
+
+			if (
+				inchesDropdown &&
+				!inchesDropdown.contains(event.target) &&
+				!inchesSelect.contains(event.target)
+			) {
 				isInchesOpen = false;
 			}
 		});
@@ -121,19 +127,25 @@
 			<div class="height-input-group">
 				<div class="custom-select-container">
 					<div class="custom-select" id="feet-select" on:click={toggleFeetDropdown}>
-						<div class="selected-option">{feet}</div>
+						<div class="selected-option">{feet !== null ? feet : 'ft'}</div>
 						<button class="caret-button">
 							<svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M1 1L6 7L11 1" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path
+									d="M1 1L6 7L11 1"
+									stroke="#666666"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
 							</svg>
 						</button>
 					</div>
-					
+
 					{#if isFeetOpen}
 						<div class="dropdown-options" id="feet-dropdown">
 							{#each feetOptions as value}
-								<div 
-									class="dropdown-option {feet === value ? 'selected' : ''}" 
+								<div
+									class="dropdown-option {feet === value ? 'selected' : ''}"
 									on:click={() => selectFeet(value)}
 								>
 									{value}
@@ -142,26 +154,31 @@
 						</div>
 					{/if}
 				</div>
-				
 				<span class="unit">ft</span>
 			</div>
-			
+
 			<div class="height-input-group">
 				<div class="custom-select-container">
 					<div class="custom-select" id="inches-select" on:click={toggleInchesDropdown}>
-						<div class="selected-option">{inches}</div>
+						<div class="selected-option">{inches !== null ? inches : 'in'}</div>
 						<button class="caret-button">
 							<svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M1 1L6 7L11 1" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path
+									d="M1 1L6 7L11 1"
+									stroke="#666666"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
 							</svg>
 						</button>
 					</div>
-					
+
 					{#if isInchesOpen}
 						<div class="dropdown-options" id="inches-dropdown">
 							{#each inchesOptions as value}
-								<div 
-									class="dropdown-option {inches === value ? 'selected' : ''}" 
+								<div
+									class="dropdown-option {inches === value ? 'selected' : ''}"
 									on:click={() => selectInches(value)}
 								>
 									{value}
@@ -170,20 +187,17 @@
 						</div>
 					{/if}
 				</div>
-				
 				<span class="unit">in</span>
 			</div>
 		</div>
-		
+
 		<div class="hide-option">
-			<button 
-				class="toggle-button {hideHeight ? 'active' : ''}" 
+			<button
+				class="toggle-button {hideHeight ? 'active' : ''}"
 				on:click={toggleHideHeight}
 			>
 				<div class="toggle-indicator"></div>
-				<div class="toggle-text">
-					Hide from profile
-				</div>
+				<div class="toggle-text">Hide from profile</div>
 			</button>
 		</div>
 	</div>
@@ -285,7 +299,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center; /* Center content vertically */
 	}
 
 	/* Height input */
@@ -315,17 +328,21 @@
 		cursor: pointer;
 		display: flex;
 		align-items: center;
-		position: relative;
 		justify-content: space-between;
 	}
-	
+
 	.selected-option {
 		font-weight: 500;
 		text-align: center;
 		flex: 1;
 		color: #333;
 	}
-	
+
+	.selected-option:empty::before {
+		content: 'Select';
+		color: #aaa;
+	}
+
 	.dropdown-options {
 		position: absolute;
 		top: 100%;
@@ -340,7 +357,7 @@
 		z-index: 100;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
-	
+
 	.dropdown-option {
 		padding: 12px 15px;
 		cursor: pointer;
@@ -348,26 +365,26 @@
 		font-size: 16px;
 		text-align: center;
 	}
-	
+
 	.dropdown-option:hover {
 		background-color: #f0e1ff;
 	}
-	
+
 	.dropdown-option.selected {
 		background-color: #e0caff;
 		font-weight: 500;
 	}
-	
+
 	.unit {
 		font-size: 18px;
 		color: #555;
 	}
-	
+
 	/* Hide option */
 	.hide-option {
 		margin-top: 10px;
 	}
-	
+
 	/* Toggle button style */
 	.toggle-button {
 		display: flex;
@@ -379,12 +396,12 @@
 		cursor: pointer;
 		transition: background-color 0.2s;
 	}
-	
+
 	.toggle-button.active {
 		background-color: #e0caff;
 		border-color: #b388ff;
 	}
-	
+
 	.toggle-indicator {
 		width: 20px;
 		height: 20px;
@@ -393,31 +410,31 @@
 		margin-right: 10px;
 		transition: background-color 0.2s;
 	}
-	
+
 	.toggle-button.active .toggle-indicator {
 		background-color: #b388ff;
 	}
-	
+
 	.toggle-text {
 		font-size: 14px;
 		color: #555;
 	}
-	
+
 	/* Scrollbar styling */
 	.dropdown-options::-webkit-scrollbar {
 		width: 8px;
 	}
-	
+
 	.dropdown-options::-webkit-scrollbar-track {
 		background: #f1f1f1;
 		border-radius: 10px;
 	}
-	
+
 	.dropdown-options::-webkit-scrollbar-thumb {
 		background: #b388ff;
 		border-radius: 10px;
 	}
-	
+
 	.caret-button {
 		background: transparent;
 		border: none;
@@ -428,7 +445,23 @@
 		padding: 0;
 	}
 
-	/* Next button */
+	/* Next button - Matched with preferences page */
+	.next-button {
+		background-color: #b388ff;
+		color: white;
+		border: none;
+		border-radius: 30px;
+		padding: 15px 20px;
+		font-size: 16px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		margin: 20px;
+		font-family: 'Nunito', sans-serif;
+		margin-top: auto;
+	}
+
 	.next-button.disabled {
 		background-color: #cccccc;
 		cursor: not-allowed;

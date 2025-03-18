@@ -7,11 +7,13 @@
 	let minAge = 18;
 	let maxAge = 18;
 	let showOutsideRange = false;
+	let selectedGender = null; // New state for gender preference
 
 	// Dropdown states
 	let isGoalOpen = false;
 	let isMinAgeOpen = false;
 	let isMaxAgeOpen = false;
+	let isGenderOpen = false; // New dropdown state
 
 	// Button state
 	let buttonEnabled = false;
@@ -22,9 +24,12 @@
 	// Age options (18 to 70)
 	const ageOptions = Array.from({ length: 53 }, (_, i) => i + 18);
 
+	// Gender options
+	const genderOptions = ['Men', 'Women', 'Transgender', 'Trans-Masc', 'Trans-Femme','Non-binary','Genderdfluid','Agender','Prefer not to say',];
+
 	// Check if required fields are filled to enable button
 	$: {
-		buttonEnabled = selectedGoal && minAge && maxAge;
+		buttonEnabled = selectedGoal && minAge && maxAge && selectedGender;
 	}
 
 	function goBack() {
@@ -42,18 +47,28 @@
 		isGoalOpen = !isGoalOpen;
 		isMinAgeOpen = false;
 		isMaxAgeOpen = false;
+		isGenderOpen = false;
 	}
 
 	function toggleMinAgeDropdown() {
 		isMinAgeOpen = !isMinAgeOpen;
 		isGoalOpen = false;
 		isMaxAgeOpen = false;
+		isGenderOpen = false;
 	}
 
 	function toggleMaxAgeDropdown() {
 		isMaxAgeOpen = !isMaxAgeOpen;
 		isGoalOpen = false;
 		isMinAgeOpen = false;
+		isGenderOpen = false;
+	}
+
+	function toggleGenderDropdown() {
+		isGenderOpen = !isGenderOpen;
+		isGoalOpen = false;
+		isMinAgeOpen = false;
+		isMaxAgeOpen = false;
 	}
 
 	// Toggle outside range preference
@@ -70,8 +85,6 @@
 	function selectMinAge(age) {
 		minAge = age;
 		isMinAgeOpen = false;
-
-		// Ensure maxAge is never less than minAge
 		if (maxAge < minAge) {
 			maxAge = minAge;
 		}
@@ -80,11 +93,14 @@
 	function selectMaxAge(age) {
 		maxAge = age;
 		isMaxAgeOpen = false;
-
-		// Ensure minAge is never greater than maxAge
 		if (minAge > maxAge) {
 			minAge = maxAge;
 		}
+	}
+
+	function selectGender(gender) {
+		selectedGender = gender;
+		isGenderOpen = false;
 	}
 
 	// Close dropdowns when clicking outside
@@ -93,9 +109,11 @@
 			const goalDropdown = document.getElementById('goal-dropdown');
 			const minAgeDropdown = document.getElementById('min-age-dropdown');
 			const maxAgeDropdown = document.getElementById('max-age-dropdown');
+			const genderDropdown = document.getElementById('gender-dropdown');
 			const goalSelect = document.getElementById('goal-select');
 			const minAgeSelect = document.getElementById('min-age-select');
 			const maxAgeSelect = document.getElementById('max-age-select');
+			const genderSelect = document.getElementById('gender-select');
 
 			if (
 				goalDropdown &&
@@ -119,6 +137,14 @@
 				!maxAgeSelect.contains(event.target)
 			) {
 				isMaxAgeOpen = false;
+			}
+
+			if (
+				genderDropdown &&
+				!genderDropdown.contains(event.target) &&
+				!genderSelect.contains(event.target)
+			) {
+				isGenderOpen = false;
 			}
 		});
 	});
@@ -168,7 +194,7 @@
 			<div class="select-wrapper goal-wrapper">
 				<div class="custom-select" id="goal-select" on:click={toggleGoalDropdown}>
 					<div class="selected-option goal-option {selectedGoal ? 'selected' : ''}">
-   						 {selectedGoal || 'What are you relationship goals?'}
+						{selectedGoal || 'What are your relationship goals?'}
 					</div>
 					<button class="caret-button">
 						<svg
@@ -197,6 +223,47 @@
 								on:click={() => selectGoal(goal)}
 							>
 								{goal}
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+
+		<!-- New "I'm looking for..." dropdown -->
+		<div class="form-field">
+			<div class="select-wrapper goal-wrapper">
+				<div class="custom-select" id="gender-select" on:click={toggleGenderDropdown}>
+					<div class="selected-option goal-option {selectedGender ? 'selected' : ''}">
+						{selectedGender || "I'm looking for..."}
+					</div>
+					<button class="caret-button">
+						<svg
+							width="12"
+							height="8"
+							viewBox="0 0 12 8"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M1 1L6 7L11 1"
+								stroke="#666666"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</button>
+				</div>
+
+				{#if isGenderOpen}
+					<div class="dropdown-options" id="gender-dropdown">
+						{#each genderOptions as gender}
+							<div
+								class="dropdown-option {selectedGender === gender ? 'selected' : ''}"
+								on:click={() => selectGender(gender)}
+							>
+								{gender}
 							</div>
 						{/each}
 					</div>
@@ -445,8 +512,8 @@
 	}
 
 	.goal-option.selected {
-    color: #000;
-}
+		color: #000;
+	}
 
 	.dropdown-options {
 		position: absolute;

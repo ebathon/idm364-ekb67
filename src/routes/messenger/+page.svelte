@@ -10,7 +10,7 @@
 	const messages = writable([
 		{
 			type: 'received',
-			text: 'Hey Elizabeth, How are you doing?',
+			text: 'Hey Josh, How are you doing?',
 			time: '9:41 AM',
 			delivered: true
 		}
@@ -57,7 +57,7 @@
 					'Can we reschedule our meeting tomorrow?',
 					'Thanks for checking in!'
 				];
-	const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+				const randomResponse = responses[Math.floor(Math.random() * responses.length)];
 
 				messages.update((msgs) => [
 					...msgs,
@@ -119,7 +119,7 @@
 	<!-- Chat Header -->
 	<div class="chat-header">
 		<div class="back-button" on:click={() => goto('/messages')}>‹</div>
-		<h2>Elizabeth</h2>
+		<h2>Shelby</h2>
 	</div>
 
 	<!-- Chat Conversation -->
@@ -152,9 +152,8 @@
 			placeholder="iMessage"
 			on:keydown={(e) => e.key === 'Enter' && sendMessage()}
 		/>
-		<button class="btn thumb-btn" on:click={sendThumb} aria-label="Send thumbs up"> 👍 </button>
+		<button class="btn thumb-btn" on:click={sendThumb} aria-label="Send thumbs up">👍</button>
 		<button class="btn send-btn" on:click={sendMessage} aria-label="Send message">
-			<!-- If you have a send icon image: -->
 			{#if sendIcon}
 				<img src={sendIcon} alt="Send" />
 			{:else}
@@ -293,8 +292,8 @@
 	.thumb {
 		padding: 5px;
 		border-radius: 50%;
-		width: 36px;
-		height: 36px;
+		width: 45px;
+		height: 45px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -322,11 +321,11 @@
 
 	/* Button styles */
 	.btn {
-		width: 36px;
-		height: 36px;
+		width: 60px; /* Increased from 45px */
+		height: 60px; /* Increased from 45px */
 		border: none;
 		cursor: pointer;
-		margin-left: 8px;
+		
 		transition: transform 0.1s ease;
 		background-color: transparent;
 		display: flex;
@@ -334,13 +333,17 @@
 		align-items: center;
 	}
 
-	.btn:active {
-		transform: scale(1.1);
+	.btn img {
+		width: 45px; /* Increased from 20px */
+		height: 45px; /* Increased from 20px */
 	}
 
-	.btn img {
-		width: 20px;
-		height: 20px;
+	.thumb-btn {
+		font-size: 30px; /* Increased size of thumbs-up emoji */
+	}
+
+	.btn:active {
+		transform: scale(1.1);
 	}
 
 	/* Read receipts */

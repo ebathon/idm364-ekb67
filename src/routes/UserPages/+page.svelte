@@ -9,7 +9,7 @@
 	import { supabase } from '$lib/supabaseClient';
 
 	const { data } = $props();
-	$inspect(data)
+	$inspect(data);
 
 	let currentCity = $state('Unknown');
 	let events = $state([]); // API events
@@ -30,8 +30,8 @@
 	});
 
 	$effect(() => {
-		const storedFavorites = localStorage.getItem('favoriteEvents'); // Fixed key name
-		if (storedFavorites){
+		const storedFavorites = localStorage.getItem('favoriteEvents');
+		if (storedFavorites) {
 			favoriteEvents = JSON.parse(storedFavorites);
 		}
 		detectCityAndFetchEvents();
@@ -39,13 +39,11 @@
 
 	// Fetch events from Supabase
 	async function fetchSupabaseEvents() {
-		// If data is passed from the server, use it
 		if (data && data.items && data.items.length > 0) {
 			supabaseEvents = [...data.items];
 			return;
 		}
 
-		// Fallback to client-side fetching if server data isn't available
 		const { data: supabaseData, error: supabaseError } = await supabase.from('happen').select('*');
 		if (supabaseError) {
 			console.error('Error fetching from Supabase:', supabaseError);
@@ -73,17 +71,16 @@
 	async function getEvents() {
 		if (isLoading) return;
 		isLoading = true;
-		error = null; // Reset error state
+		error = null;
 
 		try {
 			const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
 			console.log('Attempting to fetch events from:', url);
-			
+
 			const res = await fetch(url);
-			
-			// Log detailed response info
+
 			console.log('Response status:', res.status);
-			
+
 			if (!res.ok) {
 				const errorText = await res.text();
 				console.error('API error response:', errorText);
@@ -93,18 +90,16 @@
 			const data = await res.json();
 			console.log('Successfully fetched events data:', data);
 
-			// Check if data has the expected structure
 			if (!data || !Array.isArray(data.events_results)) {
 				console.warn('Unexpected data structure:', data);
-				events = []; // Set empty array if data structure is wrong
+				events = [];
 			} else {
 				events = data.events_results.map((event) => ({
 					...event,
 					id: generateUniqueId(event)
 				}));
 			}
-			
-			// Handle music events if they exist
+
 			if (data.events2_results) {
 				musicEvents = data.events2_results.map((event) => ({
 					...event,
@@ -114,7 +109,7 @@
 		} catch (err) {
 			console.error('Failed to fetch events:', err);
 			error = `Failed to fetch events: ${err.message}`;
-			events = []; // Ensure events is at least an empty array
+			events = [];
 			musicEvents = [];
 		} finally {
 			isLoading = false;
@@ -139,7 +134,7 @@
 							data.address?.town ||
 							data.address?.village ||
 							'Unknown Location';
-						getEvents(); // Fetch events after detecting city
+						getEvents();
 					} catch (err) {
 						console.error('Error fetching city:', err);
 						error = 'Failed to fetch city.';
@@ -160,7 +155,7 @@
 <!-- Header -->
 <header>
 	<div class="log">Welcome, Josh!</div>
-	<div>Happen</div>
+	<div class="app-title">Happen</div>
 	<div class="setting">
 		<img src={setting} height="28" width="28" alt="Settings" />
 	</div>
@@ -243,7 +238,6 @@
 			{/each}
 		</div>
 
-		<!-- Music Events Section - Will display events from events2_results if available -->
 		<h3>Concerts in {currentCity}</h3>
 		<div class="events-container">
 			{#each musicEvents as event (event.id)}
@@ -285,214 +279,13 @@
 <menu>
 	<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
 	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
+	<div><a href="/messages"><img src={message} height="60" width="60" alt="Messages" /></a></div>
+	<div><a href="profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
 </menu>
-<!-- Header -->
-<header>
-	<div class="log"><a href="signin.html">Sign in</a></div>
-	<div>Happen</div>
-	<div class="setting">
-		<img src={setting} height="28" width="28" alt="Settings" />
-	</div>
-</header>
-
-<!-- Main Content -->
-<div class="content">
-	<h2 class="main_home_title">Current City: {currentCity}</h2>
-
-	{#if error}
-		<p class="error">{error}</p>
-	{:else}
-		<h3>API Events in {currentCity}</h3>
-		<div class="events-container">
-			{#each events as event (event.id)}
-				<div class="events">
-					<button
-						class="favorite-btn"
-						onclick={() => toggleFavorite(event.id)}
-						aria-label={favoriteEvents.includes(event.id)
-							? 'Remove from favorites'
-							: 'Add to favorites'}
-					>
-						<svg
-							class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}"
-							viewBox="0 0 24 24"
-						>
-							<path
-								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-							></path>
-						</svg>
-					</button>
-					<a href={event.link} target="_blank">
-						<img
-							src={event.thumbnail || 'https://placehold.co/150'}
-							alt="Event Thumbnail"
-							class="thumbnail"
-						/>
-						<strong>{event.title}</strong>
-					</a>
-					<p>{event.date?.when || 'No date available'}</p>
-					<p class="describe">{event.description || 'No description available.'}</p>
-				</div>
-			{/each}
-		</div>
-
-		<h3>Supabase Events</h3>
-		<div class="events-container">
-			{#each supabaseEvents as item (item.id)}
-				<div class="events">
-					<button
-						class="favorite-btn"
-						onclick={() => toggleFavorite(item.id)}
-						aria-label={favoriteEvents.includes(item.id)
-							? 'Remove from favorites'
-							: 'Add to favorites'}
-					>
-						<svg
-							class="heart-icon {favoriteEvents.includes(item.id) ? 'active' : ''}"
-							viewBox="0 0 24 24"
-						>
-							<path
-								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-							></path>
-						</svg>
-					</button>
-					<a href={item.link} target="_blank">
-						<img
-							src={item.image || 'https://placehold.co/150'}
-							alt="Event Thumbnail"
-							class="thumbnail"
-						/>
-						<strong>{item.name}</strong>
-					</a>
-					<p>{item.date || 'No date available'}</p>
-					<p class="describe">{item.description || 'No description available.'}</p>
-				</div>
-			{/each}
-		</div>
-	{/if}
-</div>
-
-<!-- Navigation Menu -->
-<menu>
-	<div class="active" id="home"><img src={home} height="60" width="60" alt="Home" /></div>
-	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="/messages"><img src={message} height="60" width="60" alt="Likes" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Likes" /></a></div>
-</menu>
-
-<!-- <style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    img {
-        display: block;
-    }
-
-    header {
-        background-image: linear-gradient(#D3B9FF, rgb(255, 255, 255));
-        display: flex;
-        justify-content: space-between;
-        font-family: 'Roboto';
-        color: #000000;
-        padding: 28px;
-        font-size: 28px;
-    }
-
-    .log {
-        font-size: 20px;
-        text-decoration: underline;
-    }
-
-    .setting {
-        padding-left: 31px;
-    }
-
-    .content {
-        width: 100%;
-        overflow-y: auto;
-        background: #ffffff;
-    }
-
-    menu {
-        background-image: linear-gradient(rgb(255, 255, 255), #D3B9FF);
-        display: flex;
-        text-align: center;
-        font-family: "Poppins";
-        position: fixed;
-        left: 50%;
-        bottom: 10px;
-        transform: translateX(-50%);
-        border-radius: 10px;
-        padding: 10px;
-        width: 960px;
-        margin: auto;
-    }
-
-    menu img {
-        margin: auto;
-    }
-
-    .content {
-        height: calc(100vh - 78px);
-        padding: 15px 15px 100px 15px;
-    }
-
-    .events-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 10px;
-        justify-content: center;
-    }
-
-    .events-container .events {
-        width: 220px;
-        border: 3px solid black;
-        padding: 10px;
-        text-align: center;
-        border-radius: 8px;
-        background-color: white;
-    }
-
-    .events-container img {
-        object-fit: cover;
-        align-content: center;
-        width: 100%;
-        border-radius: 5px;
-    }
-
-    .load-more {
-        display: block;
-        margin: 20px auto;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-family: "Poppins";
-        background-color: #482C2C;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .load-more:hover {
-        background-color: #6a3f3f;
-    }
-
-    .load-more:disabled {
-        background-color: #bbb;
-        cursor: not-allowed;
-    }
-</style> -->
 
 <style>
-	/* Import Nunito font from Google Fonts */
-	@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+	/* Import fonts: Nunito and Pathway Extreme */
+	@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Pathway+Extreme:wght@400;550&display=swap');
 
 	* {
 		padding: 0;
@@ -512,12 +305,13 @@
 	}
 
 	header {
-		background-image: linear-gradient(#d3b9ff, rgb(255, 255, 255));
+	    background-image: linear-gradient(#d3b9ff, rgb(255, 255, 255));
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding: 15px 20px;
 		font-size: 16px;
+		position: relative; /* For absolute positioning of app-title */
 	}
 
 	.log {
@@ -530,6 +324,19 @@
 		text-decoration: none;
 		color: #000;
 	}
+
+.app-title {
+    font-family: 'Pathway Extreme', sans-serif;
+    font-size: 24px;
+    font-weight: 550;
+    color: #5f2eea;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
 
 	.setting {
 		padding: 0;
@@ -551,7 +358,6 @@
 		font-weight: 600;
 	}
 
-	/* Add location icon before city name */
 	.main_home_title::before {
 		content: '';
 		display: inline-block;
@@ -562,26 +368,29 @@
 		background-repeat: no-repeat;
 	}
 
-	/* H3 styling with Nunito font */
 	h3 {
 		font-family: 'Nunito', sans-serif;
 		font-size: 24px;
 		font-weight: 600;
 		padding: 0 20px;
-		margin-bottom: 15px;
+		margin-top: 10px;
+		margin-bottom: 10px;
 	}
 
-	/* Events display */
+	h3:first-of-type {
+		margin-top: 15px;
+	}
+
 	.events-container {
 		display: flex;
 		overflow-x: auto;
 		gap: 15px;
-		padding: 0 20px;
-		scrollbar-width: none; /* Hide scrollbar for Firefox */
+		padding: 0 20px 10px;
+		scrollbar-width: none;
 	}
 
 	.events-container::-webkit-scrollbar {
-		display: none; /* Hide scrollbar for Chrome/Safari */
+		display: none;
 	}
 
 	.events {
@@ -627,7 +436,6 @@
 		-webkit-box-orient: vertical;
 	}
 
-	/* Added "favorite" heart button */
 	.favorite-btn {
 		position: absolute;
 		top: 10px;
@@ -654,7 +462,7 @@
 	.heart-icon.active {
 		fill: #ff4b8a;
 	}
-	/* Navigation menu styling */
+
 	menu {
 		display: flex;
 		justify-content: space-around;
@@ -665,7 +473,6 @@
 		right: 0;
 		margin: 0;
 		padding: 10px 0;
-
 		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
 	}
 
@@ -684,68 +491,5 @@
 	menu img {
 		width: 60px;
 		height: 60px;
-	}
-
-	.events-container {
-		display: flex;
-		overflow-x: auto;
-		gap: 15px;
-		padding: 0 20px;
-		scrollbar-width: none; /* Hide scrollbar for Firefox */
-	}
-
-	.events-container::-webkit-scrollbar {
-		display: none; /* Hide scrollbar for Chrome/Safari */
-	}
-
-	.events {
-		flex: 0 0 auto;
-		width: 220px;
-		border-radius: 12px;
-		overflow: hidden;
-		position: relative;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-		border: none;
-		padding: 0;
-		background: white;
-	}
-
-	.events img {
-		width: 100%;
-		height: 120px;
-		object-fit: cover;
-		border-radius: 0;
-	}
-
-	.events a {
-		text-decoration: none;
-		color: black;
-	}
-
-	.events strong {
-		display: block;
-		font-size: 14px;
-		margin: 10px 10px 5px 10px;
-	}
-
-	.events p {
-		font-size: 12px;
-		color: #666;
-		margin: 0 10px 10px 10px;
-	}
-
-	.favorite-btn {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		width: 32px;
-		height: 32px;
-		background-color: rgba(255, 255, 255, 0.8);
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: none;
-		cursor: pointer;
 	}
 </style>
