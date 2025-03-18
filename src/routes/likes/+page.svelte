@@ -210,6 +210,15 @@
 					</a>
 					<p>{event.date?.when || event.date || 'No date available'}</p>
 					<p class="describe">{event.description || 'No description available.'}</p>
+					<a href={`/likers?event=${encodeURIComponent(event.id)}&title=${encodeURIComponent(event.title || event.name)}`} class="matches-btn">
+						<span>Potential Matches</span>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+							<circle cx="9" cy="7" r="4"></circle>
+							<path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+							<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+						</svg>
+					</a>
 				</div>
 			{/each}
 		</div>
@@ -315,6 +324,8 @@
 		position: relative;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		background: white;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.events img {
@@ -349,6 +360,32 @@
 		-webkit-line-clamp: 3;
 		line-clamp: 3; /* Added standard property for compatibility */
 		max-height: 4.5em;
+		margin-bottom: auto !important;
+	}
+
+	/* Potential Matches button */
+	.matches-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin: 8px 10px 10px;
+		padding: 8px 0;
+		background-color: #f0e6ff;
+		color: #6b47b8;
+		border-radius: 6px;
+		font-size: 12px;
+		font-weight: 600;
+		text-align: center;
+		transition: background-color 0.2s;
+	}
+	
+	.matches-btn:hover {
+		background-color: #e6d9ff;
+	}
+	
+	.matches-btn svg {
+		flex-shrink: 0;
 	}
 
 	/* Favorite button */
