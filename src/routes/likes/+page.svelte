@@ -139,11 +139,32 @@
 			console.error('Error fetching API events:', err);
 		}
 	}
+
+	// Helper function to get the proper image source
+	function getImageSource(event) {
+		// Check if event has an image_path (from Supabase)
+		if (event.image_path) {
+			return `/events/${event.image_path}`;
+		}
+		
+		// Try getting thumbnail from API events
+		if (event.thumbnail) {
+			return event.thumbnail;
+		}
+		
+		// Try getting image from Supabase events
+		if (event.image) {
+			return event.image;
+		}
+		
+		// Fallback to placeholder
+		return 'https://placehold.co/150';
+	}
 </script>
 
 <!-- Header -->
 <header>
-	<div class="log"><a href="signin.html">Sign in</a></div>
+	<div class="log"><a href="/sign_in/1">Sign in</a></div>
 	<div>Your Likes</div>
 	<div class="setting">
 		<img src={setting} height="28" width="28" alt="Settings" />
@@ -180,14 +201,24 @@
 					</button>
 					<a href={event.link || event.url} target="_blank">
 						<img
-							src={event.thumbnail || event.image || 'https://placehold.co/150'}
+							src={getImageSource(event)}
 							alt="Event Thumbnail"
 							class="thumbnail"
+							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title || event.name}</strong>
 					</a>
 					<p>{event.date?.when || event.date || 'No date available'}</p>
 					<p class="describe">{event.description || 'No description available.'}</p>
+					<a href={`/likers?event=${encodeURIComponent(event.id)}&title=${encodeURIComponent(event.title || event.name)}`} class="matches-btn">
+						<span>Potential Matches</span>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+							<circle cx="9" cy="7" r="4"></circle>
+							<path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+							<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+						</svg>
+					</a>
 				</div>
 			{/each}
 		</div>
@@ -197,9 +228,9 @@
 <!-- Navigation Menu -->
 <menu>
 	<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
-	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
+	<div class="active"><img src={likes} height="60" width="60" alt="Likes" /></div>
 	<div><a href="/messages"><img src={message} height="60" width="60" alt="Messages" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
+	<div><a href="/profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
 </menu>
 
 <style>
@@ -293,6 +324,8 @@
 		position: relative;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		background: white;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.events img {
@@ -325,7 +358,34 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;
+		line-clamp: 3; /* Added standard property for compatibility */
 		max-height: 4.5em;
+		margin-bottom: auto !important;
+	}
+
+	/* Potential Matches button */
+	.matches-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin: 8px 10px 10px;
+		padding: 8px 0;
+		background-color: #f0e6ff;
+		color: #6b47b8;
+		border-radius: 6px;
+		font-size: 12px;
+		font-weight: 600;
+		text-align: center;
+		transition: background-color 0.2s;
+	}
+	
+	.matches-btn:hover {
+		background-color: #e6d9ff;
+	}
+	
+	.matches-btn svg {
+		flex-shrink: 0;
 	}
 
 	/* Favorite button */
@@ -386,5 +446,51 @@
 	menu img {
 		width: 60px;
 		height: 60px;
+	}
+	
+	.active {
+		position: relative;
+	}
+	
+	.active::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 30px;
+		height: 3px;
+		background-color: #d3b9ff;
+		border-radius: 3px;
+	}
+	
+	.error {
+		color: #e53935;
+		padding: 15px 20px;
+		background-color: #ffebee;
+		border-radius: 8px;
+		margin: 15px 20px;
+		font-weight: 500;
+	}
+	
+	.loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 200px;
+		font-family: 'Nunito', sans-serif;
+		color: #555;
+	}
+	
+	.loading::after {
+		content: '...';
+		animation: dots 1.5s steps(5, end) infinite;
+	}
+	
+	@keyframes dots {
+		0%, 20% { content: '.'; }
+		40% { content: '..'; }
+		60% { content: '...'; }
+		80%, 100% { content: ''; }
 	}
 </style>
