@@ -139,11 +139,32 @@
 			console.error('Error fetching API events:', err);
 		}
 	}
+
+	// Helper function to get the proper image source
+	function getImageSource(event) {
+		// Check if event has an image_path (from Supabase)
+		if (event.image_path) {
+			return `/events/${event.image_path}`;
+		}
+		
+		// Try getting thumbnail from API events
+		if (event.thumbnail) {
+			return event.thumbnail;
+		}
+		
+		// Try getting image from Supabase events
+		if (event.image) {
+			return event.image;
+		}
+		
+		// Fallback to placeholder
+		return 'https://placehold.co/150';
+	}
 </script>
 
 <!-- Header -->
 <header>
-	<div class="log"><a href="signin.html">Sign in</a></div>
+	<div class="log"><a href="/sign_in/1">Sign in</a></div>
 	<div>Your Likes</div>
 	<div class="setting">
 		<img src={setting} height="28" width="28" alt="Settings" />
@@ -180,9 +201,10 @@
 					</button>
 					<a href={event.link || event.url} target="_blank">
 						<img
-							src={event.thumbnail || event.image || 'https://placehold.co/150'}
+							src={getImageSource(event)}
 							alt="Event Thumbnail"
 							class="thumbnail"
+							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title || event.name}</strong>
 					</a>
@@ -197,9 +219,9 @@
 <!-- Navigation Menu -->
 <menu>
 	<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
-	<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
+	<div class="active"><img src={likes} height="60" width="60" alt="Likes" /></div>
 	<div><a href="/messages"><img src={message} height="60" width="60" alt="Messages" /></a></div>
-	<div><a href="profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
+	<div><a href="/profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
 </menu>
 
 <style>
@@ -325,6 +347,7 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;
+		line-clamp: 3; /* Added standard property for compatibility */
 		max-height: 4.5em;
 	}
 
@@ -386,5 +409,51 @@
 	menu img {
 		width: 60px;
 		height: 60px;
+	}
+	
+	.active {
+		position: relative;
+	}
+	
+	.active::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 30px;
+		height: 3px;
+		background-color: #d3b9ff;
+		border-radius: 3px;
+	}
+	
+	.error {
+		color: #e53935;
+		padding: 15px 20px;
+		background-color: #ffebee;
+		border-radius: 8px;
+		margin: 15px 20px;
+		font-weight: 500;
+	}
+	
+	.loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 200px;
+		font-family: 'Nunito', sans-serif;
+		color: #555;
+	}
+	
+	.loading::after {
+		content: '...';
+		animation: dots 1.5s steps(5, end) infinite;
+	}
+	
+	@keyframes dots {
+		0%, 20% { content: '.'; }
+		40% { content: '..'; }
+		60% { content: '...'; }
+		80%, 100% { content: ''; }
 	}
 </style>
