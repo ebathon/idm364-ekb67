@@ -8,13 +8,16 @@
 	import profile from '$lib/image/profile_nav.png';
 	import { supabase } from '$lib/supabaseClient';
 
-	let currentCity = 'Unknown';
-	let events = []; // API events
-	let supabaseEvents = []; // Supabase events
-	let error = null;
-	let nextPageToken = null;
+	const { data } = $props();
+	$inspect(data)
+
+	let currentCity = $state('Unknown');
+	let events = $state([]); // API events
+	let supabaseEvents = $state([]); // Supabase events
+	let error = $state(null);
+	let nextPageToken = $state(null);
 	let isLoading = false;
-	let favoriteEvents = [];
+	let favoriteEvents = $state([]);
 
 	onMount(() => {
 		const storedFavorites = localStorage.getItem('favoriteEvents');
@@ -25,15 +28,41 @@
 		fetchSupabaseEvents();
 	});
 
-	// Fetch events from Supabase
-	async function fetchSupabaseEvents() {
-		const { data, error } = await supabase.from('happen').select('*');
-		if (error) {
-			console.error('Error fetching from Supabase:', error);
-		} else {
-			supabaseEvents = [...data]; // Ensure reactivity
+	$effect(() => {
+		const storedFavorites = localStorage.getItem('favorite Events');
+		if (storedFavorites){
+			favoriteEvents =JSON.parse(storedFavorites);
 		}
+		detectCityAndFetchEvents();
 	}
+)
+
+	// Fetch events from Supabase
+	// async function fetchSupabaseEvents() {
+	// 	const { data, error } = await supabase.from('happen').select('*');
+	// 	if (error) {
+	// 		console.error('Error fetching from Supabase:', error);
+	// 	} else {
+	// 		supabaseEvents = [...data]; // Ensure reactivity
+	// 	}
+	// }
+	
+	// Replace the commented out fetchSupabaseEvents function with this:
+async function fetchSupabaseEvents() {
+  // If data is passed from the server, use it
+  if (data && data.items && data.items.length > 0) {
+    supabaseEvents = [...data.items];
+    return;
+  }
+
+  // Fallback to client-side fetching if server data isn't available
+  const { data: supabaseData, error: supabaseError } = await supabase.from('happen').select('*');
+  if (supabaseError) {
+    console.error('Error fetching from Supabase:', supabaseError);
+  } else {
+    supabaseEvents = [...supabaseData];
+  }
+}
 
 	// Function to generate a unique event ID
 	function generateUniqueId(event) {
@@ -53,33 +82,47 @@
 	// Function to fetch API-based events based on the detected city
 
 	async function getEvents() {
-		if (isLoading) return;
-		isLoading = true;
+    if (isLoading) return;
+    isLoading = true;
+    error = null; // Reset error state
 
-		try {
-			const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    try {
+        const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+        console.log('Attempting to fetch events from:', url);
+        
+        const res = await fetch(url);
+        
+        // Log detailed response info
+        console.log('Response status:', res.status);
+        console.log('Response headers:', [...res.headers.entries()]);
+        
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('API error response:', errorText);
+            throw new Error(`HTTP error! Status: ${res.status}, Details: ${errorText}`);
+        }
 
-			const url = `${baseUrl}/get-events?city=${encodeURIComponent(currentCity)}`;
-			const res = await fetch(url);
+        const data = await res.json();
+        console.log('Successfully fetched events data:', data);
 
-			if (!res.ok) {
-				throw new Error(`HTTP error! Status: ${res.status}`);
-			}
-
-			const data = await res.json();
-			console.log('Fetched events:', data);
-
-			events = (data.events_results || []).map((event) => ({
-				...event,
-				id: generateUniqueId(event) // Assign unique ID
-			}));
-		} catch (err) {
-			console.error('Failed to fetch events:', err);
-			error = 'Failed to fetch events.';
-		} finally {
-			isLoading = false;
-		}
-	}
+        // Check if data has the expected structure
+        if (!data || !Array.isArray(data.events_results)) {
+            console.warn('Unexpected data structure:', data);
+            events = []; // Set empty array if data structure is wrong
+        } else {
+            events = data.events_results.map((event) => ({
+                ...event,
+                id: generateUniqueId(event)
+            }));
+        }
+    } catch (err) {
+        console.error('Failed to fetch events:', err);
+        error = `Failed to fetch events: ${err.message}`;
+        events = []; // Ensure events is at least an empty array
+    } finally {
+        isLoading = false;
+    }
+}
 
 	// Function to detect user's city and update `currentCity`
 	function detectCityAndFetchEvents() {
@@ -133,13 +176,13 @@
 	{#if error}
 		<p class="error">{error}</p>
 	{:else}
-		<h3>API Events in {currentCity}</h3>
+		<h3>Events near {currentCity}</h3>
 		<div class="events-container">
 			{#each events as event (event.id)}
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(event.id)}
+						onclick={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -167,13 +210,13 @@
 			{/each}
 		</div>
 
-		<h3>Supabase Events :3</h3>
+		<h3>Top Local Events</h3>
 		<div class="events-container">
 			{#each supabaseEvents as item (item.id)}
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(item.id)}
+						onclick={() => toggleFavorite(item.id)}
 						aria-label={favoriteEvents.includes(item.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -189,10 +232,11 @@
 					</button>
 					<a href={item.link} target="_blank">
 						<img
-							src={item.image || 'https://placehold.co/150'}
-							alt="Event Thumbnail"
-							class="thumbnail"
-						/>
+						src={item.image_path ? `events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
+						alt="Event Thumbnail"
+						class="thumbnail"
+						onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+					/>
 						<strong>{item.name}</strong>
 					</a>
 					<p>{item.date || 'No date available'}</p>
@@ -232,7 +276,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(event.id)}
+						onclick={() => toggleFavorite(event.id)}
 						aria-label={favoriteEvents.includes(event.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
@@ -266,7 +310,7 @@
 				<div class="events">
 					<button
 						class="favorite-btn"
-						on:click={() => toggleFavorite(item.id)}
+						onclick={() => toggleFavorite(item.id)}
 						aria-label={favoriteEvents.includes(item.id)
 							? 'Remove from favorites'
 							: 'Add to favorites'}
