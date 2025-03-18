@@ -8,6 +8,9 @@
 	let showToast = false;
 	let toastMessage = '';
 
+	$: isCodeComplete =
+		verificationCode.every((digit) => digit !== '') && verificationCode.length === 6;
+
 	function sendCode() {
 		if (phoneNumber || email) {
 			codeSent = true;
@@ -151,7 +154,11 @@
 			<button class="resend-button" on:click={resendCode}> Didn't receive a code? </button>
 		</div>
 
-		<button class="next-button" on:click={handleNext}>
+		<button
+			class="next-button {isCodeComplete ? 'active' : 'disabled'}"
+			on:click={handleNext}
+			disabled={!isCodeComplete}
+		>
 			Next <span class="arrow">›</span>
 		</button>
 	</div>
@@ -167,12 +174,15 @@
 </div>
 
 <style>
+	/* Import fonts */
+	@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Nunito:wght@400;600;700&display=swap');
+
 	/* Container and global styles */
 	:global(*) {
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
-		font-family: 'Segoe UI', 'Roboto', sans-serif;
+		font-family: 'Roboto', sans-serif; /* Set Roboto as the default font */
 	}
 
 	.container {
@@ -232,7 +242,7 @@
 
 	.verification-title h1 {
 		font-size: 24px;
-		font-weight: 600;
+		font-weight: 400;
 	}
 
 	.phone-icon {
@@ -290,6 +300,7 @@
 		margin-top: 5px;
 		width: 120px;
 		align-self: center;
+		font-family: 'Nunito', sans-serif; /* Apply Nunito to button */
 	}
 
 	/* Verification code inputs */
@@ -338,6 +349,7 @@
 		cursor: pointer;
 		font-size: 14px;
 		margin-top: 15px;
+		font-family: 'Nunito', sans-serif; /* Apply Nunito to button */
 	}
 
 	/* Next button */
@@ -354,6 +366,17 @@
 		cursor: pointer;
 		margin-top: auto;
 		width: 100%;
+		font-family: 'Nunito', sans-serif; /* Apply Nunito to button */
+	}
+	.next-button.disabled {
+		background-color: #cccccc;
+		cursor: not-allowed;
+		opacity: 0.7;
+	}
+
+	.next-button.active {
+		background-color: #8a70db;
+		cursor: pointer;
 	}
 
 	.arrow {

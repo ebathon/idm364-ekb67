@@ -57,7 +57,7 @@
 					'Can we reschedule our meeting tomorrow?',
 					'Thanks for checking in!'
 				];
-				const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+	const randomResponse = responses[Math.floor(Math.random() * responses.length)];
 
 				messages.update((msgs) => [
 					...msgs,
