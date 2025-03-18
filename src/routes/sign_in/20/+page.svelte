@@ -33,7 +33,7 @@
 	
 	function finish() {
 		if (finishButtonEnabled) {
-			goto('/profile/complete');
+			goto('/UserPages');
 		}
 	}
 	
@@ -334,7 +334,7 @@
 	}
 
 	.finish-button.active {
-		background-color: #b388ff;
+		background-color: #7848FB;
 		cursor: pointer;
 	}
 

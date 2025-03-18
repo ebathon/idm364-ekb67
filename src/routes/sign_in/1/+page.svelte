@@ -132,7 +132,7 @@
 		width: 100%;
 		padding: 15px;
 		background-color: white;
-		color: #6a5acd;
+		color: #7848FB;
 		border: none;
 		border-radius: 30px;
 		font-size: 18px;

@@ -97,8 +97,6 @@
 			<div class="progress-step"></div>
 			<div class="progress-line"></div>
 			<div class="progress-step"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
 		</div>
 		<div class="verification-title">
 			<h1>Verification</h1>
@@ -222,8 +220,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #444;
-		border-color: #444;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {

@@ -1,325 +1,498 @@
 <script>
-    // Component props and state can be defined here
-    export let isLoggedIn = false;
-    
-    // You can add your component logic here
-    let activeSection = 'home';
-    
-    function setActive(section) {
-      activeSection = section;
-    }
-    
-    function handleNext() {
-      // Logic for handling "Next" button click
-      // For example, you might want to navigate to profile2
-      // Using Svelte's router (e.g., svelte-navigator or svelte-routing)
-      // window.location.href = '/profile2';
-    }
-  </script>
-  
-  <svelte:head>
-    <title>Sign In</title>
-    <link rel="icon" type="image/x-icon" href="image/favicon.png">
-  </svelte:head>
-  
-  <header>
-    <div>Happen</div>
-    <div class="setting"><img src="image/settings_icon.png" height="28" width="28" alt="Settings" /></div>
-  </header>
-  
-  <div class="content">
-    <div class="register_content">
-      <!-- We would handle error display with Svelte's reactivity -->
-      {#if loginError}
-        <p class="error">{loginError}</p>
-      {/if}
-      
-      <form on:submit|preventDefault={handleNext}>
-        <div class="form-group">
-          <label for="email">Phone Number:</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-      </form>
-      
-      <a href="/profile2">
-        <button class="signin" type="submit" on:click={handleNext}>Next</button>
-      </a>
-    </div>
-  </div>
-  
-  <style>
-   @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&family=Piazzolla:ital,opsz,wght@0,8..30,100..900;1,8..30,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-   * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-  
-    header {
-      background-image: linear-gradient(#D3B9FF, rgb(255, 255, 255));
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Roboto', sans-serif;
-      color: #000000;
-      padding: 28px;
-      font-size: 28px;
-    }
-  
-    .content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: #ffffff;
-      margin: 0;
-      padding: 1rem;
-    }
-  
-    h3 {
-      padding-bottom: 16px;
-    }
-  
-    .register_content {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      padding: 2rem 3rem;
-      border-radius: 20px;
-      max-width: 100%;
-    }
-  
-    #edu {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      margin-top: 10px;
-      margin-bottom: 40px;
-    }
-  
-    .register_content form {
-      width: 400px;
-    }
-  
-    .register_content label {
-      font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
-    }
-  
-    .register_content input {
-      font-family: 'Mobile-Standard', sans-serif;
-      font-size: 1rem;
-    }
-  
-    .register_content input[type="submit"] {
-      font-family: 'Button-Text', sans-serif;
-      font-size: 1rem;
-    }
-  
-    p.error {
-      color: red;
-    }
-  
-    h2 {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.75rem;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-  
-    form, p {
-      font-family: 'Mobile-Standard', sans-serif;
-      font-size: 1rem;
-    }
-  
-    label {
-      font-family: 'poppins', sans-serif;
-      font-size: 18px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-  
-    .register_content label {
-      justify-content: left;
-    }
-  
-    input, button {
-      font-family: 'Mobile-Standard', sans-serif;
-      margin-top: 10px;
-      padding: 10px 115px 10px 30px;
-      border: 1px solid black;
-      border-radius: 10px;
-      background-color: #794AFC;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  
-    button#signin {
-      background-color: white;
-    }
-  
-    input {
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-  
-    input.register_btn {
-      background-color: #ffffff;
-      color: black;
-      padding: 10px 40px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      justify-items: center;
-      align-self: center;
-    }
-  
-    .signin_btn {
-      background-color: #5B965E;
-      color: #794AFC;
-      padding: 10px 10px;
-      font-family: 'Button-Text', sans-serif;
-      font-size: 1rem;
-    }
-  
-    button.pill {
-      padding: 5px;
-    }
-  
-    div.button-group {
-      margin-bottom: 5px;
-    }
-  
-    button {
-      font-family: 'Nunito', sans-serif;
-      margin-top: 10px;
-      padding: 5px 115px 5px 30px;
-      border: 1px solid black;
-      border-radius: 20px;
-      background-color: #c3c3c3;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-  
-    button.signin {
-      text-align: center;
-      justify-content: center;
-      display: flex;
-      padding-left: 0;
-      padding-right: 0;
-      border-radius: 30px;
-      margin-top: 20px;
-      color: white;
-      width: 300px;
-      background-color: #794AFC;
-    }
-  
-    a.hobby {
-      margin-top: -88px;
-    }
-  
-    .pill:hover {
-      background-color: #5f5f5f;
-      color: white;
-    }
-  
-    .signin_btn a {
-      color: white;
-    }
-  
-    input#password {
-      margin-bottom: 10px;
-    }
-  
-    input:focus {
-      outline: none;
-      border-color: rgba(254, 221, 103, 1);
-      box-shadow: 0 0 5px rgba(252, 179, 179, 0.5);
-    }
-  
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-  
-    a {
-      text-decoration: none;
-    }
-  
-    div.content a {
-      width: 300px;
-    }
-  
-    @media screen and (max-width: 960px) {
-      header {
-        padding: 30px;
-        font-size: 26px;
-      }
-  
-      .content {
-        height: auto;
-        padding: 15px;
-      }
-    }
-  
-    @media screen and (max-width: 659px) {
-      input, button {
-        padding: 10px 40px;
-      }
-  
-      div.register_content form {
-        width: 300px;
-      }
-  
-      .signin_btn {
-        padding: 10px 40px;
-        font-size: 14px;
-      }
-  
-      label {
-        font-size: 14px;
-      }
-  
-      input.register_btn {
-        font-size: 14px;
-      }
-    }
-  
-    @media screen and (max-width: 1000px) {
-      input {
-        width: auto;
-      }
-  
-      .register_content form {
-        width: 100%;
-      }
-  
-      input, button {
-        padding: 10px 10px;
-      }
-  
-      .signin_btn {
-        padding: 10px 40px;
-        font-size: 12px;
-      }
-  
-      label {
-        font-size: 12px;
-      }
-  
-      input.register_btn {
-        font-size: 12px;
-      }
-  
-      .register_content input {
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  </style>
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	// Import image from lib/image directory
+	import dogImage from '$lib/image/Josh_Dog.jpeg';
+	
+	// Import navigation icons
+	import home from '$lib/image/home_nav.png';
+	import likes from '$lib/image/likes_nav.png';
+	import message from '$lib/image/message_nav.png';
+	import profile from '$lib/image/profile_nav.png';
+	
+	// Import event images
+	import mardiGras from '$lib/image/MardiGras.png';
+	import skyline from '$lib/image/Skyline.png';
+	
+	// Profile data - renamed from "profile" to "userData" to avoid conflict
+	const userData = {
+		name: 'Josh',
+		age: 28,
+		occupation: 'Software Engineer',
+		education: 'Drexel University',
+		political: 'Democrat',
+		religion: 'Jewish',
+		height: "5' 10\"",
+		drinking: 'Sometimes',
+		languages: ['English', 'Spanish'],
+		hobbies: ['Running', 'Playing Drums'],
+		relationshipGoals: 'Looking for a long-term relationship',
+		prompts: [
+			{
+				question: 'Something on my bucket list',
+				answer: 'Hike the entire Appalachian Trail in one go'
+			},
+			{
+				question: "Something you'd never guess about me",
+				answer: 'I was a competitive chess player in high school.'
+			}
+		],
+		likedEvents: [
+			{
+				title: 'Mardi Gras Bar Crawl',
+				image: mardiGras
+			},
+			{
+				title: 'Philadelphia Skyline Tour',
+				image: skyline
+			}
+		]
+	};
+	
+	function goBack() {
+		history.back();
+	}
+	
+	function sendMessage() {
+		// Handle message sending
+		console.log('Send message to', userData.name);
+	}
+</script>
+
+<div class="container">
+	<div class="profile-header">
+		<button class="back-button" on:click={goBack}>
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+				<path
+					d="M15 18L9 12L15 6"
+					stroke="black"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+		</button>
+	</div>
+	
+	<div class="profile-photo-container">
+		<img src={dogImage} alt="Josh with his dog" class="profile-photo"/>
+		<div class="profile-name-container">
+			<div class="profile-name-info">
+				<h2>{userData.name}, {userData.age}</h2>
+				<span class="verified-badge">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="#0095f6">
+						<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+					</svg>
+				</span>
+			</div>
+			<button class="message-button" on:click={sendMessage}>
+				Message
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="#0095f6">
+					<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+				</svg>
+			</button>
+		</div>
+	</div>
+	
+	<div class="profile-info-container">
+		<div class="stat-item relationship-goal-container">
+			<span class="stat-icon">❤️</span>
+			<span class="relationship-goal">{userData.relationshipGoals}</span>
+		</div>
+		
+		<div class="profile-stats">
+			<div class="stat-item">
+				<span class="stat-icon">💼</span>
+				<span class="stat-text">{userData.occupation}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">🎓</span>
+				<span class="stat-text">{userData.education}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">🏛️</span>
+				<span class="stat-text">{userData.political}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">📖</span>
+				<span class="stat-text">{userData.religion}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">📏</span>
+				<span class="stat-text">{userData.height}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">🍸</span>
+				<span class="stat-text">{userData.drinking}</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">🗣️</span>
+				<span class="stat-languages">
+					{#each userData.languages as language}
+						<span class="language-badge">{language}</span>
+					{/each}
+				</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-icon">🏃</span>
+				<span class="stat-languages">
+					{#each userData.hobbies as hobby}
+						<span class="hobby-badge">{hobby}</span>
+					{/each}
+				</span>
+			</div>
+		</div>
+		
+		<div class="profile-prompts">
+			{#each userData.prompts as prompt}
+				<div class="prompt-container">
+					<h3 class="prompt-question">{prompt.question}</h3>
+					<p class="prompt-answer">{prompt.answer}</p>
+				</div>
+			{/each}
+		</div>
+		
+		<div class="recent-events">
+			<h3 class="section-title">Recently Liked Events</h3>
+			<div class="events-container">
+				{#each userData.likedEvents as event}
+					<div class="event-card">
+						<img src={event.image} alt={event.title} class="event-image"/>
+						<div class="event-overlay"></div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</div>
+	
+	<!-- Updated Navigation Menu -->
+	<menu>
+		<div><a href="/"><img src={home} height="60" width="60" alt="Home" /></a></div>
+		<div><a href="likes"><img src={likes} height="60" width="60" alt="Likes" /></a></div>
+		<div><a href="/messages"><img src={message} height="60" width="60" alt="Messages" /></a></div>
+		<div><a href="profile"><img src={profile} height="60" width="60" alt="Profile" /></a></div>
+	</menu>
+</div>
+
+<style>
+	/* Import fonts */
+	@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Nunito:wght@400;600;700&display=swap');
+
+	/* Container and global styles */
+	:global(*) {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'SF Pro Display', 'Roboto', sans-serif;
+	}
+
+	.container {
+		max-width: 100%;
+		min-height: 100vh;
+		background-color: white;
+		display: flex;
+		flex-direction: column;
+		padding-bottom: 80px; /* Add padding for menu bar */
+	}
+
+	/* Profile header */
+	.profile-header {
+		padding: 15px;
+		display: flex;
+		align-items: center;
+		z-index: 10;
+	}
+
+	.back-button {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 5px;
+	}
+
+	/* Profile photo */
+	.profile-photo-container {
+		position: relative;
+		width: calc(100% - 20px);
+		height: 40vh; /* Adjusted height for mobile */
+		overflow: hidden;
+		border-radius: 15px;
+		margin: 0 10px;
+	}
+
+	@media (min-width: 768px) {
+		.profile-photo-container {
+			height: 50vh; /* Taller for larger screens */
+		}
+	}
+
+	.profile-photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 15px;
+	}
+
+	.profile-name-container {
+		position: absolute;
+		bottom: 15px;
+		left: 15px;
+		right: 15px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap; /* Allow wrapping on very small screens */
+	}
+
+	.profile-name-info {
+		display: flex;
+		align-items: center;
+		margin-bottom: 8px; /* Space if it wraps */
+	}
+
+	.profile-name-info h2 {
+		color: white;
+		font-size: 22px; /* Slightly smaller for mobile */
+		font-weight: 600;
+		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+		margin-right: 8px;
+	}
+
+	@media (min-width: 768px) {
+		.profile-name-info h2 {
+			font-size: 24px;
+		}
+	}
+
+	.verified-badge {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.message-button {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		background-color: rgba(255, 255, 255, 0.9);
+		border: none;
+		border-radius: 20px;
+		padding: 8px 15px;
+		font-size: 14px;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	/* Profile info */
+	.profile-info-container {
+		padding: 15px;
+		flex-grow: 1;
+		overflow-y: auto; /* Allow scrolling on small screens */
+	}
+
+	.relationship-goal-container {
+		width: 100%;
+		margin-bottom: 10px;
+		background-color: #fff5f7;
+		border-radius: 10px;
+		padding: 10px;
+	}
+
+	.profile-stats {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		background-color: #f0f8f0;
+		border-radius: 15px;
+		padding: 15px;
+	}
+
+	.stat-item {
+		flex: 1 0 calc(50% - 10px); /* Two columns on mobile */
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 5px;
+	}
+
+	@media (max-width: 380px) {
+		.stat-item {
+			flex: 1 0 100%; /* One column on very small screens */
+		}
+	}
+
+	@media (min-width: 768px) {
+		.stat-item {
+			flex: 1 0 calc(33.333% - 10px); /* Three columns on larger screens */
+		}
+	}
+
+	.stat-icon {
+		font-size: 20px;
+		flex-shrink: 0; /* Prevent emoji from shrinking */
+	}
+
+	.stat-text {
+		font-size: 14px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+	.stat-languages {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		flex: 1;
+	}
+	
+	.language-badge {
+		background-color: #e8f4ff;
+		padding: 4px 8px;
+		border-radius: 10px;
+		font-size: 13px;
+		color: #0066cc;
+		display: block;
+		margin-bottom: 4px;
+	}
+	
+	.hobby-badge {
+		background-color: #f0f0f0;
+		padding: 4px 8px;
+		border-radius: 10px;
+		font-size: 13px;
+		color: #333;
+		display: block;
+		margin-bottom: 4px;
+	}
+	
+	.relationship-goal {
+		font-weight: 500;
+		color: #d23f6a;
+	}
+
+	/* Profile prompts */
+	.profile-prompts {
+		margin-top: 15px;
+	}
+
+	.prompt-container {
+		margin-bottom: 15px;
+		padding: 15px;
+		border: 1px dashed #ccc;
+		border-radius: 10px;
+	}
+
+	.prompt-question {
+		font-size: 16px;
+		font-weight: 600;
+		margin-bottom: 5px;
+	}
+
+	.prompt-answer {
+		font-size: 14px;
+		color: #666;
+	}
+
+	/* Recent events */
+	.recent-events {
+		margin-top: 15px;
+	}
+
+	.section-title {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 10px;
+	}
+
+	.events-container {
+		display: flex;
+		gap: 10px;
+		overflow-x: auto;
+		padding-bottom: 10px;
+		-webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+		scrollbar-width: none; /* Hide scrollbar on Firefox */
+	}
+
+	.events-container::-webkit-scrollbar {
+		display: none; /* Hide scrollbar on Chrome/Safari */
+	}
+
+	.event-card {
+		position: relative;
+		flex: 0 0 140px;
+		height: 100px;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	@media (max-width: 380px) {
+		.event-card {
+			flex: 0 0 120px; /* Smaller cards on very small screens */
+		}
+	}
+
+	.event-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.event-overlay {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 50%;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+	}
+
+	/* Updated Navigation bar to match second file */
+	menu {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 0;
+		padding: 10px 0;
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
+		z-index: 100;
+	}
+
+	menu div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	menu a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	menu img {
+		width: 50px; /* Slightly smaller on mobile */
+		height: 50px;
+	}
+
+	@media (min-width: 768px) {
+		menu img {
+			width: 60px; /* Original size on larger screens */
+			height: 60px;
+		}
+	}
+
+	/* Add safe area for devices with notches */
+	@supports (padding: max(0px)) {
+		menu {
+			padding-bottom: max(10px, env(safe-area-inset-bottom));
+		}
+		
+		.container {
+			padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+		}
+	}
+</style>

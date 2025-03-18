@@ -159,11 +159,11 @@
 
 <!-- Header -->
 <header>
-	<div class="log"><a href="/sign_in/1">Sign in</a></div>
-	<div>Happen</div>
-	<div class="setting">
-		<img src={setting} height="28" width="28" alt="Settings" />
-	</div>
+  <div class="log"><a href="/sign_in/1">Sign in</a></div>
+  <div class="app-title">Happen</div>
+  <div class="setting">
+    <img src={setting} height="28" width="28" alt="Settings" />
+  </div>
 </header>
 
 <!-- Main Content -->
@@ -383,7 +383,9 @@
 </menu>
 
 <!-- <style>
-    * {
+     @import url('https://fonts.googleapis.com/css2?family=Pathway+Extreme:wght@400;600;700&display=swap');
+	
+	* {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
@@ -393,15 +395,23 @@
         display: block;
     }
 
-    header {
-        background-image: linear-gradient(#D3B9FF, rgb(255, 255, 255));
-        display: flex;
-        justify-content: space-between;
-        font-family: 'Roboto';
-        color: #000000;
-        padding: 28px;
-        font-size: 28px;
-    }
+  header {
+    background-image: linear-gradient(#d3b9ff, rgb(255, 255, 255));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    font-size: 16px;
+  }
+
+  .app-title {
+    font-family: 'Pathway Extreme', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #5f2eea; /* Purple color to match the gradient */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+  }
 
     .log {
         font-size: 20px;

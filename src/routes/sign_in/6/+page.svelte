@@ -71,8 +71,6 @@
 			<div class="progress-line"></div>
 			<div class="progress-step active"></div>
 			<div class="progress-line"></div>
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
 			<div class="progress-step"></div>
 			<div class="progress-line"></div>
 			<div class="progress-step"></div>
@@ -176,8 +174,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #7a7a7a;
-		border-color: #7a7a7a;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {
@@ -209,7 +207,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		
 		text-align: center;
 	}
 
@@ -275,7 +273,8 @@
 		padding: 20px;
 		border-radius: 10px;
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-		margin-bottom: 20px;
+		margin-top:60px;
+		margin-bottom: 30px;
 		width: 100%;
 		max-width: 300px;
 	}
@@ -305,7 +304,7 @@
 
 	/* Next button */
 	.next-button {
-		background-color: #b388ff;
+		background-color: #7848FB;
 		color: white;
 		border: none;
 		border-radius: 30px;

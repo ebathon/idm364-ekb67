@@ -13,6 +13,7 @@
 
 	let currentCity = $state('Unknown');
 	let events = $state([]); // API events
+	let musicEvents = $state([]); // Music events section
 	let supabaseEvents = $state([]); // Supabase events
 	let error = $state(null);
 	let nextPageToken = $state(null);
@@ -29,40 +30,29 @@
 	});
 
 	$effect(() => {
-		const storedFavorites = localStorage.getItem('favorite Events');
+		const storedFavorites = localStorage.getItem('favoriteEvents'); // Fixed key name
 		if (storedFavorites){
-			favoriteEvents =JSON.parse(storedFavorites);
+			favoriteEvents = JSON.parse(storedFavorites);
 		}
 		detectCityAndFetchEvents();
-	}
-)
+	});
 
 	// Fetch events from Supabase
-	// async function fetchSupabaseEvents() {
-	// 	const { data, error } = await supabase.from('happen').select('*');
-	// 	if (error) {
-	// 		console.error('Error fetching from Supabase:', error);
-	// 	} else {
-	// 		supabaseEvents = [...data]; // Ensure reactivity
-	// 	}
-	// }
-	
-	// Replace the commented out fetchSupabaseEvents function with this:
-async function fetchSupabaseEvents() {
-  // If data is passed from the server, use it
-  if (data && data.items && data.items.length > 0) {
-    supabaseEvents = [...data.items];
-    return;
-  }
+	async function fetchSupabaseEvents() {
+		// If data is passed from the server, use it
+		if (data && data.items && data.items.length > 0) {
+			supabaseEvents = [...data.items];
+			return;
+		}
 
-  // Fallback to client-side fetching if server data isn't available
-  const { data: supabaseData, error: supabaseError } = await supabase.from('happen').select('*');
-  if (supabaseError) {
-    console.error('Error fetching from Supabase:', supabaseError);
-  } else {
-    supabaseEvents = [...supabaseData];
-  }
-}
+		// Fallback to client-side fetching if server data isn't available
+		const { data: supabaseData, error: supabaseError } = await supabase.from('happen').select('*');
+		if (supabaseError) {
+			console.error('Error fetching from Supabase:', supabaseError);
+		} else {
+			supabaseEvents = [...supabaseData];
+		}
+	}
 
 	// Function to generate a unique event ID
 	function generateUniqueId(event) {
@@ -80,49 +70,56 @@ async function fetchSupabaseEvents() {
 	}
 
 	// Function to fetch API-based events based on the detected city
-
 	async function getEvents() {
-    if (isLoading) return;
-    isLoading = true;
-    error = null; // Reset error state
+		if (isLoading) return;
+		isLoading = true;
+		error = null; // Reset error state
 
-    try {
-        const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
-        console.log('Attempting to fetch events from:', url);
-        
-        const res = await fetch(url);
-        
-        // Log detailed response info
-        console.log('Response status:', res.status);
-        console.log('Response headers:', [...res.headers.entries()]);
-        
-        if (!res.ok) {
-            const errorText = await res.text();
-            console.error('API error response:', errorText);
-            throw new Error(`HTTP error! Status: ${res.status}, Details: ${errorText}`);
-        }
+		try {
+			const url = `/api/events?city=${encodeURIComponent(currentCity)}`;
+			console.log('Attempting to fetch events from:', url);
+			
+			const res = await fetch(url);
+			
+			// Log detailed response info
+			console.log('Response status:', res.status);
+			
+			if (!res.ok) {
+				const errorText = await res.text();
+				console.error('API error response:', errorText);
+				throw new Error(`HTTP error! Status: ${res.status}, Details: ${errorText}`);
+			}
 
-        const data = await res.json();
-        console.log('Successfully fetched events data:', data);
+			const data = await res.json();
+			console.log('Successfully fetched events data:', data);
 
-        // Check if data has the expected structure
-        if (!data || !Array.isArray(data.events_results)) {
-            console.warn('Unexpected data structure:', data);
-            events = []; // Set empty array if data structure is wrong
-        } else {
-            events = data.events_results.map((event) => ({
-                ...event,
-                id: generateUniqueId(event)
-            }));
-        }
-    } catch (err) {
-        console.error('Failed to fetch events:', err);
-        error = `Failed to fetch events: ${err.message}`;
-        events = []; // Ensure events is at least an empty array
-    } finally {
-        isLoading = false;
-    }
-}
+			// Check if data has the expected structure
+			if (!data || !Array.isArray(data.events_results)) {
+				console.warn('Unexpected data structure:', data);
+				events = []; // Set empty array if data structure is wrong
+			} else {
+				events = data.events_results.map((event) => ({
+					...event,
+					id: generateUniqueId(event)
+				}));
+			}
+			
+			// Handle music events if they exist
+			if (data.events2_results) {
+				musicEvents = data.events2_results.map((event) => ({
+					...event,
+					id: generateUniqueId(event)
+				}));
+			}
+		} catch (err) {
+			console.error('Failed to fetch events:', err);
+			error = `Failed to fetch events: ${err.message}`;
+			events = []; // Ensure events is at least an empty array
+			musicEvents = [];
+		} finally {
+			isLoading = false;
+		}
+	}
 
 	// Function to detect user's city and update `currentCity`
 	function detectCityAndFetchEvents() {
@@ -201,6 +198,7 @@ async function fetchSupabaseEvents() {
 							src={event.thumbnail || 'https://placehold.co/150'}
 							alt="Event Thumbnail"
 							class="thumbnail"
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
 						<strong>{event.title}</strong>
 					</a>
@@ -232,15 +230,51 @@ async function fetchSupabaseEvents() {
 					</button>
 					<a href={item.link} target="_blank">
 						<img
-						src={item.image_path ? `events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
-						alt="Event Thumbnail"
-						class="thumbnail"
-						onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
-					/>
+							src={item.image_path ? `/events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
+							alt="Event Thumbnail"
+							class="thumbnail"
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+						/>
 						<strong>{item.name}</strong>
 					</a>
 					<p>{item.date || 'No date available'}</p>
 					<p class="describe">{item.description || 'No description available.'}</p>
+				</div>
+			{/each}
+		</div>
+
+		<!-- Music Events Section - Will display events from events2_results if available -->
+		<h3>Concerts in {currentCity}</h3>
+		<div class="events-container">
+			{#each musicEvents as event (event.id)}
+				<div class="events">
+					<button
+						class="favorite-btn"
+						onclick={() => toggleFavorite(event.id)}
+						aria-label={favoriteEvents.includes(event.id)
+							? 'Remove from favorites'
+							: 'Add to favorites'}
+					>
+						<svg
+							class="heart-icon {favoriteEvents.includes(event.id) ? 'active' : ''}"
+							viewBox="0 0 24 24"
+						>
+							<path
+								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+							></path>
+						</svg>
+					</button>
+					<a href={event.link} target="_blank">
+						<img
+							src={event.thumbnail || 'https://placehold.co/150'}
+							alt="Event Thumbnail"
+							class="thumbnail"
+							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
+						/>
+						<strong>{event.title}</strong>
+					</a>
+					<p>{event.date?.when || 'No date available'}</p>
+					<p class="describe">{event.description || 'No description available.'}</p>
 				</div>
 			{/each}
 		</div>

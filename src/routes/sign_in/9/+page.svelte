@@ -3,8 +3,8 @@
 	import { goto } from '$app/navigation';
 
 	// State for selected values
-	let feet = 5;
-	let inches = 8;
+	let feet = null;
+	let inches = null;
 	let hideHeight = false;
 	
 	// Dropdown states
@@ -12,11 +12,16 @@
 	let isInchesOpen = false;
 	
 	// Button state
-	let buttonEnabled = true; // Always enabled since we have default values
+	let buttonEnabled = false;
 	
 	// Height options
 	const feetOptions = Array.from({ length: 8 }, (_, i) => i + 1); // 1-8 feet
 	const inchesOptions = Array.from({ length: 12 }, (_, i) => i); // 0-11 inches
+	
+	// Check if both height fields are selected to enable button
+	$: {
+		buttonEnabled = feet !== null && inches !== null;
+	}
 	
 	function goBack() {
 		history.back();
@@ -89,8 +94,6 @@
 		<div class="basic-info">Basic Information</div>
 
 		<div class="progress-bar">
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
 			<div class="progress-step active"></div>
 			<div class="progress-line"></div>
 			<div class="progress-step active"></div>
@@ -186,8 +189,9 @@
 	</div>
 
 	<button
-		class="next-button"
+		class="next-button {buttonEnabled ? 'active' : 'disabled'}"
 		on:click={goNext}
+		disabled={!buttonEnabled}
 	>
 		Next <span class="arrow">›</span>
 	</button>
@@ -248,8 +252,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #7a7a7a;
-		border-color: #7a7a7a;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {
@@ -276,12 +280,12 @@
 
 	/* Form container */
 	.form-container {
-		padding: 60px;
+		padding: 20px;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-        
+		justify-content: center; /* Center content vertically */
 	}
 
 	/* Height input */
@@ -425,20 +429,15 @@
 	}
 
 	/* Next button */
-	.next-button {
-		background-color: #b388ff;
-		color: white;
-		border: none;
-		border-radius: 30px;
-		padding: 15px 20px;
-		font-size: 16px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	.next-button.disabled {
+		background-color: #cccccc;
+		cursor: not-allowed;
+		opacity: 0.7;
+	}
+
+	.next-button.active {
+		background-color: #7848FB;
 		cursor: pointer;
-		margin: 20px;
-		font-family: 'Nunito', sans-serif;
-		margin-top: auto;
 	}
 
 	.arrow {

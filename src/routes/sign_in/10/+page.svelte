@@ -303,8 +303,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #7a7a7a;
-		border-color: #7a7a7a;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {
@@ -519,7 +519,7 @@
 
 	/* Next button */
 	.next-button {
-		background-color: #b388ff;
+		background-color: #7848FB;
 		color: white;
 		border: none;
 		border-radius: 30px;

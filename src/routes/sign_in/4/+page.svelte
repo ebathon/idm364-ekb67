@@ -39,26 +39,23 @@
 
 		<div class="basic-info">Basic Information</div>
 
-		<div class="progress-bar">
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
-			<div class="progress-line"></div>
-			<div class="progress-step"></div>
-		</div>
-
+	<div class="progress-bar">
+    <div class="progress-step active"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step active"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step active"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step"></div>
+    <div class="progress-line"></div>
+    <div class="progress-step"></div>
+	 <div class="progress-line"></div>
+    <div class="progress-step"></div>
+	</div>
 		<div class="name-title">
 			<h1>Name</h1>
 		</div>
@@ -137,8 +134,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #7a7a7a;
-		border-color: #7a7a7a;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {
@@ -201,7 +198,7 @@
 	}
 
 	.next-button.active {
-		background-color: #b388ff;
+		background-color: #7848FB;
 		cursor: pointer;
 	}
 

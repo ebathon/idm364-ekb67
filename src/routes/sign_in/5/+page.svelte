@@ -207,8 +207,6 @@
 			<div class="progress-line"></div>
 			<div class="progress-step active"></div>
 			<div class="progress-line"></div>
-			<div class="progress-step active"></div>
-			<div class="progress-line"></div>
 			<div class="progress-step"></div>
 			<div class="progress-line"></div>
 			<div class="progress-step"></div>
@@ -389,8 +387,8 @@
 	}
 
 	.progress-step.active {
-		background-color: #7a7a7a;
-		border-color: #7a7a7a;
+		background-color: #7848FB;
+		border-color: #7848FB;
 	}
 
 	.progress-line {
@@ -556,7 +554,7 @@
 	}
 
 	.calendar-day.current-month {
-		color: #000;
+		color: #FFFFF;
 		font-weight: normal;
 	}
 
@@ -565,13 +563,14 @@
 	}
 
 	.calendar-day:hover.current-month {
-		background-color: #e0caff;
+		background-color: #7848FB;
 	}
 
 	.calendar-day.selected {
-		background-color: transparent;
-		font-weight: bold;
-		color: #000;
+    background-color: #7848FB;
+    color: white;
+    font-weight: bold;
+    border-radius: 30%;
 	}
 
 	/* Next button */
@@ -598,7 +597,7 @@
 	}
 
 	.next-button.active {
-		background-color: #b388ff;
+		background-color: #7848FB;
 		cursor: pointer;
 	}
 
