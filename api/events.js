@@ -18,35 +18,35 @@ export default async function handler(req, res) {
         {
           title: `Music Festival in ${city}`,
           link: "https://example.com/event1",
-          thumbnail: "https://placehold.co/400x300?text=Music+Festival",
+          thumbnail: "/events/event1.jpg",
           description: "Annual music festival featuring local and international artists",
           date: { when: "This Weekend" }
         },
         {
           title: `Art Exhibition in ${city}`,
           link: "https://example.com/event2",
-          thumbnail: "https://placehold.co/400x300?text=Art+Exhibition",
+          thumbnail: "/events/event2.jpg",
           description: "Contemporary art exhibition featuring works from emerging artists",
           date: { when: "March 20-25" }
         },
         {
           title: `Food & Wine Festival in ${city}`,
           link: "https://example.com/event3",
-          thumbnail: "https://placehold.co/400x300?text=Food+Festival",
+          thumbnail: "/events/event3.png",
           description: "Celebrate local cuisine and wine from the region",
           date: { when: "Next Month" }
         },
         {
           title: `Tech Conference in ${city}`,
           link: "https://example.com/event4",
-          thumbnail: "https://placehold.co/400x300?text=Tech+Conference",
+          thumbnail: "/events/image8.jpg",
           description: "Annual conference for web developers and designers",
           date: { when: "April 10-12" }
         },
         {
           title: `Citywide scavenger hunt in ${city}`,
           link: "https://example.com/event5",
-          thumbnail: "https://placehold.co/400x300?text=Scavenger+Hunt",
+          thumbnail: "/events/event5.jpg",
           description: "Explore the city with friends in this fun competitive event",
           date: { when: "April 30" }
         }
@@ -58,35 +58,35 @@ export default async function handler(req, res) {
         {
           title: `Tyler the Creator`,
           link: "https://example.com/event1",
-          thumbnail: "https://placehold.co/400x300?text=Tyler",
+          thumbnail: "/events/music1.jpg",
           description: "Don't miss the hip-hop star's latest tour with special guests",
           date: { when: "This Weekend" }
         },
         {
           title: `Sabrina Carpenter`,
           link: "https://example.com/event2",
-          thumbnail: "https://placehold.co/400x300?text=Sabrina",
+          thumbnail: "/events/music2.jpg",
           description: "Pop sensation performing her chart-topping hits live",
           date: { when: "March 20-25" }
         },
         {
           title: `Kendrick Lamar`,
           link: "https://example.com/event3",
-          thumbnail: "https://placehold.co/400x300?text=Kendrick",
+          thumbnail: "/events/music3.jpg",
           description: "Grammy-winning rapper brings his electrifying show to town",
           date: { when: "Next Month" }
         },
         {
           title: `Chappell Roan`,
           link: "https://example.com/event4",
-          thumbnail: "https://placehold.co/400x300?text=Chappell",
+          thumbnail: "/events/music4.jpg",
           description: "Rising star performing songs from her latest album",
           date: { when: "April 10-12" }
         },
         {
           title: `Ja Rule`,
           link: "https://example.com/event5",
-          thumbnail: "https://placehold.co/400x300?text=Ja+Rule",
+          thumbnail: "/events/music5.png",
           description: "Legendary hip-hop artist performing his classic hits",
           date: { when: "April 30" }
         }
