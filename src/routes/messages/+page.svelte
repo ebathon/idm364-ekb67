@@ -254,7 +254,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-	
+
 		margin-bottom: 70px;
 	}
 
@@ -331,22 +331,32 @@
 	}
 
 	menu {
-		background-image: linear-gradient(rgb(255, 255, 255), #d3b9ff);
 		display: flex;
-		justify-content: space-evenly; /* Even spacing */
-		text-align: center;
-		font-family: 'Poppins';
+		justify-content: space-around;
+		align-items: center;
 		position: fixed;
-		left: 50%;
-		bottom: 10px;
-		transform: translateX(-50%);
-		border-radius: 10px;
-		padding: 10px;
-		width: 100%;
-		margin: auto;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 0;
+		padding: 10px 0;
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
+	}
+
+	menu div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	menu a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	menu img {
-		margin: auto;
+		width: 60px;
+		height: 60px;
 	}
 </style>
