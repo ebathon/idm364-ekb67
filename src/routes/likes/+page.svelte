@@ -146,17 +146,17 @@
 		if (event.image_path) {
 			return `/events/${event.image_path}`;
 		}
-		
+
 		// Try getting thumbnail from API events
 		if (event.thumbnail) {
 			return event.thumbnail;
 		}
-		
+
 		// Try getting image from Supabase events
 		if (event.image) {
 			return event.image;
 		}
-		
+
 		// Fallback to placeholder
 		return 'https://placehold.co/150';
 	}
@@ -204,15 +204,29 @@
 							src={getImageSource(event)}
 							alt="Event Thumbnail"
 							class="thumbnail"
-							on:error={(e) => { e.target.src = 'https://placehold.co/150'; }}
+							on:error={(e) => {
+								e.target.src = 'https://placehold.co/150';
+							}}
 						/>
 						<strong>{event.title || event.name}</strong>
 					</a>
 					<p>{event.date?.when || event.date || 'No date available'}</p>
 					<p class="describe">{event.description || 'No description available.'}</p>
-					<a href={`/likers?event=${encodeURIComponent(event.id)}&title=${encodeURIComponent(event.title || event.name)}`} class="matches-btn">
+					<a
+						href={`/likers?event=${encodeURIComponent(event.id)}&title=${encodeURIComponent(event.title || event.name)}`}
+						class="matches-btn"
+					>
 						<span>Potential Matches</span>
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<svg
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
 							<circle cx="9" cy="7" r="4"></circle>
 							<path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -379,11 +393,11 @@
 		text-align: center;
 		transition: background-color 0.2s;
 	}
-	
+
 	.matches-btn:hover {
 		background-color: #e6d9ff;
 	}
-	
+
 	.matches-btn svg {
 		flex-shrink: 0;
 	}
@@ -447,23 +461,11 @@
 		width: 60px;
 		height: 60px;
 	}
-	
+
 	.active {
 		position: relative;
 	}
-	
-	.active::after {
-		content: '';
-		position: absolute;
-		bottom: -5px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 30px;
-		height: 3px;
-		background-color: #d3b9ff;
-		border-radius: 3px;
-	}
-	
+
 	.error {
 		color: #e53935;
 		padding: 15px 20px;
@@ -472,7 +474,7 @@
 		margin: 15px 20px;
 		font-weight: 500;
 	}
-	
+
 	.loading {
 		display: flex;
 		justify-content: center;
@@ -481,16 +483,26 @@
 		font-family: 'Nunito', sans-serif;
 		color: #555;
 	}
-	
+
 	.loading::after {
 		content: '...';
 		animation: dots 1.5s steps(5, end) infinite;
 	}
-	
+
 	@keyframes dots {
-		0%, 20% { content: '.'; }
-		40% { content: '..'; }
-		60% { content: '...'; }
-		80%, 100% { content: ''; }
+		0%,
+		20% {
+			content: '.';
+		}
+		40% {
+			content: '..';
+		}
+		60% {
+			content: '...';
+		}
+		80%,
+		100% {
+			content: '';
+		}
 	}
 </style>
