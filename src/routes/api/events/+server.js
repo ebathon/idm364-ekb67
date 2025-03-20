@@ -85,10 +85,12 @@ export function GET({ url }) {
                 date: { when: "April 30" }
             }
         ]
+        
     };
 
     return json({
         events_results: mockData.events_results,
         events2_results: mockData2.events2_results
     });
+
 }
