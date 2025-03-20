@@ -228,14 +228,14 @@
 							></path>
 						</svg>
 					</button>
-					<a href={item.link} target="_blank">
+					<a href={`/events/${item.id}`}>
 						<img
 							src={item.image_path ? `/events/${item.image_path}` : (item.image || 'https://placehold.co/150')}
 							alt="Event Thumbnail"
 							class="thumbnail"
 							onerror={(e) => { e.target.src = 'https://placehold.co/150'; }}
 						/>
-						<strong>{item.name}</strong>
+						<strong>{item.title || item.name}</strong>
 					</a>
 					<p>{item.date || 'No date available'}</p>
 					<p class="describe">{item.description || 'No description available.'}</p>
